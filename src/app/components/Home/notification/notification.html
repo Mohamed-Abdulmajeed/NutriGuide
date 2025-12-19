@@ -1,0 +1,39 @@
+<div class="notifications-page">
+    <h2 class="page-title">الإشعارات</h2>
+
+    <ng-container *ngIf="notifications$ | async as notifications; else noData">
+
+        <div class="notification-item" *ngFor="let not of notifications" [class.unread]="!not.isRead"
+            (click)="onNotificationClick(not)">
+
+            <!-- ICON -->
+            <div class="icon-wrapper" [ngClass]="getIconBgClass(not)">
+                <i class="fa-solid" [ngClass]="getIcon(not)"></i>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="content">
+                <div class="title">{{ not.title }}</div>
+
+                <div class="message">
+                    {{ buildMessage(not) }}
+                </div>
+
+                <div class="time">
+                    {{ not.scheduleTime | date:'short' }}
+                </div>
+            </div>
+
+            <span class="status-dot" *ngIf="!not.isRead"></span>
+
+        </div>
+
+    </ng-container>
+
+    <ng-template #noData>
+        <div class="empty-state">
+            <i class="fa-solid fa-bell-slash"></i>
+            <p>لا توجد إشعارات</p>
+        </div>
+    </ng-template>
+</div>

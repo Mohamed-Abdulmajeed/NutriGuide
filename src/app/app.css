@@ -1,0 +1,251 @@
+/* ===========================
+   RTL عام
+=========================== */
+.app-container {
+    direction: rtl;
+    /* allow content to grow and page to scroll */
+    min-height: 100vh;
+    width: 100%;
+    background: var(--bg);
+    color: var(--text);
+    transition: all 0.3s ease;
+}
+
+/* ===========================
+   LAYOUT
+=========================== */
+.layout-container {
+    display: flex;
+    /* don't lock the layout to viewport height, let content determine height */
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+/* ===========================
+   ASIDE WRAPPER
+=========================== */
+.aside-wrapper {
+    flex-shrink: 0;
+    height: 100vh;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 100;
+}
+
+.aside-wrapper:not(.closed) {
+    width: 260px;
+}
+
+.aside-wrapper.closed {
+    width: 70px;
+}
+
+/* ===========================
+   MAIN CONTENT
+=========================== */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-right: 260px;
+    /* allow inner .content to scroll; avoid fixing main-content height */
+    min-height: 100vh;
+    width: calc(100% - 260px);
+    background: var(--bg);
+}
+
+.main-content.full {
+    margin-right: 70px;
+    width: calc(100% - 70px);
+}
+
+/* ===========================
+   HEADER
+=========================== */
+app-header {
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+/* ===========================
+   FOOTER
+=========================== */
+app-footer {
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+/* ===========================
+   CONTENT
+=========================== */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 24px;
+    min-height: 0;
+    background: var(--bg);
+    scroll-behavior: smooth;
+}
+
+.content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+    background: rgba(16, 185, 129, 0.2);
+    border-radius: 4px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+    background: rgba(16, 185, 129, 0.4);
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
+=========================== */
+
+/* Large Screens - 1280px */
+@media (min-width: 1280px) {
+    .main-content {
+        margin-right: 260px;
+        width: calc(100% - 260px);
+    }
+
+    .content {
+        padding: 24px;
+    }
+}
+
+/* Tablet - 1024px */
+@media (max-width: 1024px) {
+    .aside-wrapper:not(.closed) {
+        width: 240px;
+    }
+
+    .aside-wrapper.closed {
+        width: 65px;
+    }
+
+    .main-content {
+        margin-right: 240px;
+        width: calc(100% - 240px);
+    }
+
+    .main-content.full {
+        margin-right: 65px;
+        width: calc(100% - 65px);
+    }
+
+    .content {
+        padding: 20px;
+    }
+}
+
+/* Small Tablet - 768px */
+@media (max-width: 768px) {
+    .aside-wrapper:not(.closed) {
+        width: 200px;
+    }
+
+    .main-content {
+        margin-right: 200px;
+        width: calc(100% - 200px);
+    }
+
+    .main-content.full {
+        margin-right: 65px;
+        width: calc(100% - 65px);
+    }
+
+    .content {
+        padding: 16px;
+    }
+}
+
+/* Mobile - 900px and down */
+@media (max-width: 900px) {
+    .layout-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .aside-wrapper {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        top: auto;
+        width: 100% !important;
+        height: auto;
+        min-height: 70px;
+        z-index: 100;
+    }
+
+    .aside-wrapper.closed {
+        transform: translateY(calc(100% - 70px));
+    }
+
+    .main-content {
+        margin-right: 0 !important;
+        margin-bottom: 70px;
+        width: 100% !important;
+        height: calc(100vh - 70px);
+    }
+
+    .main-content.full {
+        margin-bottom: 70px;
+    }
+
+    .content {
+        padding: 16px;
+        padding-bottom: 20px;
+    }
+}
+
+/* Small Mobile - 480px */
+@media (max-width: 480px) {
+    .aside-wrapper {
+        min-height: 65px;
+    }
+
+    .aside-wrapper.closed {
+        transform: translateY(calc(100% - 65px));
+    }
+
+    .main-content {
+        margin-bottom: 65px;
+        height: calc(100vh - 65px);
+    }
+
+    .content {
+        padding: 12px;
+        padding-bottom: 16px;
+    }
+}
+
+/* Ultra Mobile - 320px */
+@media (max-width: 320px) {
+    .content {
+        padding: 8px;
+        padding-bottom: 12px;
+    }
+
+    .main-content {
+        margin-bottom: 60px;
+        height: calc(100vh - 60px);
+    }
+}

@@ -1,0 +1,78 @@
+<div class="meal-card">
+    <div class="overlay-left">
+        <button class="action-btn" aria-label="رجوع" (click)="goBack()">
+            <i class="fa-solid fa-arrow-right-long"></i>
+        </button>
+    </div>
+    <!-- Meal Image -->
+    <div class="meal-image">
+        <img [src]="meal.image" [alt]="meal.name" title="صورة الوجبة">
+        <span class="meal-type">{{ meal.mealType }}</span>
+    </div>
+
+    <!-- Meal Content -->
+    <div class="meal-content">
+
+        <!-- Header -->
+        <div class="meal-header">
+            <h3>{{ meal.name }}</h3>
+            <span class="meal-time">
+                <i class="fas fa-clock"></i> {{ meal.mealTime }}
+            </span>
+        </div>
+
+        <!-- Nutrition -->
+        <div class="nutrition-grid">
+            <div class="nutrition-item calories">
+                <i class="fas fa-fire"></i>
+                <span>{{ meal.calories }} سعرات</span>
+            </div>
+            <div class="nutrition-item protein">
+                <i class="fas fa-drumstick-bite"></i>
+                <span>{{ meal.protein }} g بروتين</span>
+            </div>
+            <div class="nutrition-item carbs">
+                <i class="fas fa-bread-slice"></i>
+                <span>{{ meal.carbs }} g كربوهيدرات</span>
+            </div>
+            <div class="nutrition-item fat">
+                <i class="fas fa-tint"></i>
+                <span>{{ meal.fat }} g دهون</span>
+            </div>
+        </div>
+
+        <!-- Health Benefits -->
+        <div class="meal-section">
+            <h4><i class="fas fa-heart"></i> الفوائد الصحية</h4>
+            <p>{{ meal.healthBenefits }}</p>
+        </div>
+
+        <!-- Ingredients -->
+        <div class="meal-section">
+            <h4><i class="fas fa-list"></i> المكونات</h4>
+            <ul class="ingredients-list">
+                <li *ngFor="let ing of meal.ingredientsDTO">
+                    <i class="fas fa-check-circle ingredient-icon"></i>
+                    <span>{{ ing.name }} — {{ ing.amount }} {{ ing.unit }}</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Preparation -->
+        <div class="meal-section">
+            <h4><i class="fas fa-utensils"></i> طريقة التحضير</h4>
+
+            <ol class="preparation-steps">
+                <li *ngFor="let step of meal.preparation.split('.')">
+                    {{ step }}
+                </li>
+            </ol>
+        </div>
+
+
+
+
+    </div>
+
+
+</div>

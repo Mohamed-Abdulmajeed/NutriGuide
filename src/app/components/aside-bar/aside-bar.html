@@ -1,0 +1,77 @@
+<div class="aside-bar" [class.closed]="!isOpen" dir="rtl">
+    <!-- Top Section: Logo & Toggle -->
+    <div class="aside-top">
+        <div class="logo-container" *ngIf="isOpen">
+            <div class="logo-icon">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <span class="brand-name">NutriGuide</span>
+        </div>
+        <button class="btn-toggle" (click)="toggleSidebar.emit()" aria-label="تبديل القائمة الجانبية"
+            title="تبديل القائمة الجانبية">
+            <i class="fas" [ngClass]="{'fa-angle-right': isOpen, 'fa-angle-left': !isOpen}"></i>
+        </button>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="aside-menu">
+        <button [class.active]="currentPage === 'home'" (click)="navigateTo('home')" class="menu-item" title="الرئيسية">
+            <span *ngIf="isOpen" class="menu-text">الرئيسية</span> <i class="fas fa-home"></i>
+
+        </button>
+
+        <button [class.active]="currentPage === 'favorite'" (click)="navigateTo('Favorite')" class="menu-item"
+            title="المفضلة">
+
+            <span *ngIf="isOpen" class="menu-text">المفضلة</span><i class="fas fa-heart"></i>
+        </button>
+
+        <button [class.active]="currentPage === 'notification'" (click)="navigateTo('notification')" class="menu-item"
+            title="الإشعارات">
+
+            <span *ngIf="isOpen" class="menu-text">الإشعارات</span>
+            <i class="fas fa-bell">
+                <span
+                    *ngIf="isOpen && hasUnreadNotifications && ((currentPage !== 'notification' && !notificationsSeen) || (currentPage === 'notification' && showBellOnNotificationPageOnce))"
+                    class="notification-badge"></span>
+            </i>
+        </button>
+
+        <button [class.active]="currentPage === 'all-plans'" (click)="navigateTo('all-plans')" class="menu-item"
+            title="كل الخطط">
+
+            <span *ngIf="isOpen" class="menu-text">كل الخطط</span><i class="fas fa-list"></i>
+        </button>
+
+        <button [class.active]="currentPage === 'add-plan'" (click)="navigateTo('add-plan')" class="menu-item "
+            title="إنشاء خطة">
+
+            <span *ngIf="isOpen" class="menu-text">إنشاء خطة</span><i class="fas fa-plus-circle"></i>
+        </button>
+
+        <button [class.active]="currentPage === 'add-meal'" (click)="navigateTo('add-meal')" class="menu-item"
+            title="اقتراح وجبة">
+
+            <span *ngIf="isOpen" class="menu-text">اقتراح وجبة</span> <i class="fas fa-utensils"></i>
+        </button>
+    </nav>
+
+    <!-- Profile Section -->
+    <div class="profile-section" *ngIf="isOpen">
+        <button (click)="navigateTo('profile')" class="profile-btn">
+            <div class="profile-avatar">
+                <!-- أيقونة الشخص العامة -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-500" fill="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                        d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+                </svg>
+                <div class="online-indicator"></div>
+            </div>
+            <div class="profile-text">
+                <div class="name">الملف الشخصى</div>
+            </div>
+        </button>
+    </div>
+
+</div>

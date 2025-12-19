@@ -1,0 +1,210 @@
+<div dir="rtl" class="generate-meal-container">
+    <div class="form-wrapper">
+        <!-- Header Section -->
+        <div class="form-header">
+            <div class="header-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h1 class="form-title">توليد وجبة جديدة</h1>
+            <p class="form-subtitle">املأ البيانات المطلوبة لتوليد وجبة مخصصة لك</p>
+        </div>
+
+        <!-- Form Section -->
+        <form [formGroup]="mealForm" (ngSubmit)="onSubmit()" class="meal-form">
+            <!-- Meal Name Field -->
+            <div class="form-group">
+                <label for="mealName" class="form-label">
+                    اسم الوجبة
+                    <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                    <i class="fas fa-tag input-icon"></i>
+                    <input type="text" id="mealName" formControlName="mealName" placeholder="مثال: وجبة الإفطار الصحية"
+                        class="form-input" [class.error]="mealName?.invalid && mealName?.touched"
+                        [class.valid]="mealName?.valid && mealName?.touched" />
+                </div>
+                <div class="error-message" *ngIf="mealName?.invalid && mealName?.touched">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span *ngIf="mealName?.errors?.['required']">اسم الوجبة مطلوب</span>
+                    <span *ngIf="mealName?.errors?.['minlength']">يجب أن يكون الاسم على الأقل حرفين</span>
+                </div>
+            </div>
+
+            <!-- Calories Field -->
+            <div class="form-group">
+                <label for="calories" class="form-label">
+                    السعرات الحرارية
+                    <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                    <i class="fas fa-fire input-icon"></i>
+                    <input type="number" id="calories" formControlName="calories" placeholder="مثال: 500"
+                        class="form-input" [class.error]="calories?.invalid && calories?.touched"
+                        [class.valid]="calories?.valid && calories?.touched" min="1" />
+                    <span class="input-suffix">سعرة حرارية</span>
+                </div>
+                <div class="error-message" *ngIf="calories?.invalid && calories?.touched">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span *ngIf="calories?.errors?.['required']">السعرات الحرارية مطلوبة</span>
+                    <span *ngIf="calories?.errors?.['min']">يجب أن تكون القيمة أكبر من صفر</span>
+                    <span *ngIf="calories?.errors?.['pattern']">يجب إدخال رقم صحيح</span>
+                </div>
+            </div>
+
+            <!-- Requirements Field -->
+            <div class="form-group">
+                <label for="requirements" class="form-label">
+                    الشروط والمتطلبات
+                    <span class="required-star">*</span>
+                </label>
+                <div class="textarea-wrapper">
+                    <i class="fas fa-clipboard-list textarea-icon"></i>
+                    <textarea id="requirements" formControlName="requirements"
+                        placeholder="مثال: وجبة نباتية، خالية من الجلوتين، غنية بالبروتين، مناسبة للرياضيين..." rows="5"
+                        class="form-textarea" [class.error]="requirements?.invalid && requirements?.touched"
+                        [class.valid]="requirements?.valid && requirements?.touched"></textarea>
+                </div>
+                <div class="error-message" *ngIf="requirements?.invalid && requirements?.touched">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span *ngIf="requirements?.errors?.['required']">الشروط والمتطلبات مطلوبة</span>
+                    <span *ngIf="requirements?.errors?.['minlength']">يجب أن تكون الشروط على الأقل 10 أحرف</span>
+                </div>
+                <div class="help-text">
+                    <i class="fas fa-info-circle"></i>
+                    اذكر جميع المتطلبات والشروط التي تريدها في الوجبة
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" [disabled]="mealForm.invalid || isSubmitting" class="submit-button">
+                <span class="button-content" [class.loading]="isSubmitting">
+                    <i *ngIf="!isSubmitting" class="fas fa-magic"></i>
+                    <i *ngIf="isSubmitting" class="fas fa-spinner fa-spin"></i>
+                    <span class="text">
+                        {{ isSubmitting ? 'جاري التوليد...' : 'توليد الوجبة' }}
+                    </span>
+                </span>
+            </button>
+
+        </form>
+
+
+        <!-- ================= RESULTS SECTION ================= -->
+        <div class="meals-results" *ngIf="resultPrompt?.length">
+
+            <h2 class="results-title text-light center">
+                <i class="fas fa-clipboard-check"></i>
+                الوجبات المقترحة
+            </h2>
+
+            <div class="meal-card" *ngFor="let meal of resultPrompt; let i = index">
+
+                <!-- Meal Image -->
+                <div class="meal-image">
+                    <img [src]="meal.image" [alt]="meal.name">
+                    <span class="meal-type">{{ meal.mealType }}</span>
+                </div>
+
+                <!-- Meal Content -->
+                <div class="meal-content">
+
+                    <!-- Header -->
+                    <div class="meal-header">
+                        <h3>{{ meal.name }}</h3>
+                        <span class="meal-time">
+                            <i class="fas fa-clock"></i> {{ meal.mealTime }}
+                        </span>
+                    </div>
+
+                    <!-- Nutrition -->
+                    <div class="nutrition-grid">
+                        <div class="nutrition-item calories">
+                            <i class="fas fa-fire"></i>
+                            <span>{{ meal.calories }} سعرات</span>
+                        </div>
+                        <div class="nutrition-item protein">
+                            <i class="fas fa-drumstick-bite"></i>
+                            <span>{{ meal.protein }} g بروتين</span>
+                        </div>
+                        <div class="nutrition-item carbs">
+                            <i class="fas fa-bread-slice"></i>
+                            <span>{{ meal.carbs }} g كربوهيدرات</span>
+                        </div>
+                        <div class="nutrition-item fat">
+                            <i class="fas fa-tint"></i>
+                            <span>{{ meal.fat }} g دهون</span>
+                        </div>
+                    </div>
+
+                    <!-- Health Benefits -->
+                    <div class="meal-section">
+                        <h4><i class="fas fa-heart"></i> الفوائد الصحية</h4>
+                        <p>{{ meal.healthBenefits }}</p>
+                    </div>
+
+                    <!-- Ingredients -->
+                    <div class="meal-section">
+                        <h4><i class="fas fa-list"></i> المكونات</h4>
+                        <ul class="ingredients-list">
+                            <li *ngFor="let ing of meal.ingredientsDTO">
+                                <i class="fas fa-check-circle ingredient-icon"></i>
+                                <span>{{ ing.name }} — {{ ing.amount }} {{ ing.unit }}</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Preparation -->
+                    <div class="meal-section">
+                        <h4><i class="fas fa-utensils"></i> طريقة التحضير</h4>
+
+                        <ol class="preparation-steps">
+                            <li *ngFor="let step of meal.preparation.split('.')">
+                                {{ step }}
+                            </li>
+                        </ol>
+                    </div>
+
+
+                    <!-- Footer -->
+                    <div class="meal-footer">
+                        <span class="budget">
+                            <i class="fas fa-wallet"></i>
+                            الميزانية: {{ meal.budget }} جنيه --- ميزانية افتراضية
+                        </span>
+
+
+                    </div>
+
+
+                    <button class="save-btn" [disabled]="savingMealIndex === i || savedMeals.has(i)"
+                        (click)="saveToFavorites(meal, i)">
+
+                        <i *ngIf="!savedMeals.has(i) && savingMealIndex !== i" class="fas fa-heart"></i>
+                        <i *ngIf="savingMealIndex === i" class="fas fa-spinner fa-spin"></i>
+                        <i *ngIf="savedMeals.has(i)" class="fas fa-check"></i>
+
+                        <span>
+                            {{
+                            savedMeals.has(i)
+                            ? 'تم الحفظ'
+                            : savingMealIndex === i
+                            ? 'جاري الحفظ...'
+                            : 'حفظ في المفضلة'
+                            }}
+                        </span>
+                    </button>
+
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>

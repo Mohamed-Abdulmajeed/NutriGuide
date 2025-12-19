@@ -1,0 +1,248 @@
+.action-btn i {
+    transition: transform 0.25s ease;
+}
+
+.action-btn:hover i {
+    transform: translateX(-2px);
+}
+
+/* Overlay container */
+.overlay-left {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    /* لأن الاتجاه RTL */
+    z-index: 10;
+}
+
+/* Back Button */
+.action-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    color: #1e293b;
+    font-size: 1.2rem;
+
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transition: all 0.25s ease;
+}
+
+/* Hover effect */
+.action-btn:hover {
+    background: #1e293b;
+    color: #fff;
+    transform: translateX(-3px);
+}
+
+/* Active (click) */
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+/* Remove focus outline */
+.action-btn:focus {
+    outline: none;
+}
+
+/* Mobile adjustments */
+@media (max-width: 576px) {
+    .action-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+}
+
+
+
+
+/* ================= RESULTS ================= */
+.meals-results {
+    margin-top: 3rem;
+}
+
+.results-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+/* ================= CARD ================= */
+.meal-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 18px;
+    /* allow inner scroll on height overflow */
+    max-height: 100vh;
+    overflow-y: auto;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.meal-card:hover {
+    transform: translateY(-4px);
+}
+
+/* ================= IMAGE ================= */
+.meal-image {
+    position: relative;
+    height: 260px;
+}
+
+.meal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.meal-type {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: #22c55e;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* ================= CONTENT ================= */
+.meal-content {
+    padding: 1.5rem 1.8rem;
+}
+
+.meal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.meal-header h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.meal-time {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* ================= NUTRITION ================= */
+.nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.8rem;
+    margin: 1.2rem 0;
+}
+
+.nutrition-item {
+    background: #f8fafc;
+    padding: 0.7rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ================= SECTIONS ================= */
+.meal-section {
+    margin-top: 1.2rem;
+}
+
+.meal-section h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: #334155;
+}
+
+.meal-section p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #475569;
+}
+
+/* ================= INGREDIENTS ================= */
+.ingredients-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ingredients-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #475569;
+    margin-bottom: 0.4rem;
+}
+
+.ingredient-icon {
+    color: #22c55e;
+    font-size: 0.9rem;
+}
+
+
+.preparation-steps {
+    padding-right: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+.preparation-steps li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    color: #475569;
+}
+
+/* ================= FOOTER ================= */
+.meal-footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #e2e8f0;
+    font-weight: 600;
+    color: #334155;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+    .meal-content {
+        padding: 1.2rem;
+    }
+
+    .meal-image {
+        height: 200px;
+    }
+
+    .meal-header h3 {
+        font-size: 1.2rem;
+    }
+}

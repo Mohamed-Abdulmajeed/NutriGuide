@@ -1,0 +1,93 @@
+<div dir="rtl" class="min-h-screen overflow-y-auto flex items-start justify-center
+           bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
+
+    <div class="w-full max-w-md bg-white dark:bg-gray-800
+               rounded-2xl shadow-lg
+               p-6 sm:p-8 my-8">
+
+        <div class="flex flex-col items-center text-center mb-6">
+            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full
+                       bg-emerald-500 text-white
+                       flex items-center justify-center mb-3">
+                <i class="fas fa-leaf text-xl sm:text-2xl"></i>
+            </div>
+
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white">
+                مرحبًا بعودتك
+            </h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                سجّل دخولك للمتابعة
+            </p>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4 sm:space-y-5">
+
+            <!-- Email -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    البريد الإلكتروني
+                </label>
+
+                <div class="relative">
+                    <input type="email" formControlName="email" placeholder="name@example.com" class="w-full pr-10 pl-4 py-3 rounded-xl
+                               border border-gray-200 dark:border-gray-700
+                               bg-gray-50 dark:bg-gray-700
+                               focus:outline-none focus:ring-2 focus:ring-emerald-400" />
+
+                    <span class="absolute rtl-input-icon top-1/2 -translate-y-1/2 text-gray-400">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                </div>
+
+                <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                    class="text-red-500 text-xs mt-1">
+                    الرجاء إدخال بريد إلكتروني صحيح.
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div>
+                <div class="flex items-center justify-between mb-1">
+                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        كلمة المرور
+                    </label>
+                    <a routerLink="/forgot-password" class="text-sm text-emerald-600 hover:underline">
+                        نسيت كلمة المرور؟
+                    </a>
+                </div>
+
+                <div class="relative">
+                    <input type="password" formControlName="password" placeholder="••••••••" class="w-full pr-10 pl-4 py-3 rounded-xl
+                               border border-gray-200 dark:border-gray-700
+                               bg-gray-50 dark:bg-gray-700
+                               focus:outline-none focus:ring-2 focus:ring-emerald-400" />
+
+                    <span class="absolute rtl-input-icon top-1/2 -translate-y-1/2 text-gray-400">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" [disabled]="loginForm.invalid || isSubmitting" class="w-full py-3 sm:py-3.5
+                       bg-gradient-to-r from-emerald-600 to-emerald-500
+                       text-white font-semibold rounded-xl shadow-md
+                       disabled:opacity-50">
+
+                <ng-container *ngIf="!isSubmitting">
+                    تسجيل الدخول
+                </ng-container>
+                <ng-container *ngIf="isSubmitting">
+                    جاري المعالجة...
+                </ng-container>
+            </button>
+
+            <div class="text-center text-sm text-gray-600 dark:text-gray-300">
+                ليس لديك حساب؟
+                <a routerLink="/register" class="text-emerald-600 font-semibold hover:underline">
+                    سجل الآن
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

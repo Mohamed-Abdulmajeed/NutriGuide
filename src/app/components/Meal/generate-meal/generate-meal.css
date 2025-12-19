@@ -1,0 +1,865 @@
+/* ===========================
+   Container
+=========================== */
+.generate-meal-container {
+    /* ensure the page can scroll and container fills viewport */
+    min-height: 100vh;
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--bg) 0%, #e5f7ef 35%, #c3f0dd 100%);
+    direction: rtl;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+:host-context(.dark-mode) .generate-meal-container {
+    background: radial-gradient(circle at top, #020617 0%, #020617 45%, #022c22 100%);
+}
+
+
+/* ===========================
+   Form Wrapper
+=========================== */
+.form-wrapper {
+    width: 100%;
+    max-width: 700px;
+    background: var(--surface);
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.16);
+    /* keep internal clipping but allow page scroll on container */
+    overflow: hidden;
+    animation: slideUp 0.5s ease-out;
+}
+
+:host-context(.dark-mode) .form-wrapper {
+    background: var(--surface);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================
+   Header Section
+=========================== */
+.form-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-800) 100%);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>');
+    opacity: 0.1;
+}
+
+.header-icon {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+}
+
+.header-icon i {
+    font-size: 3rem;
+    background: rgba(255, 255, 255, 0.2);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.form-title {
+    position: relative;
+    z-index: 1;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-subtitle {
+    position: relative;
+    z-index: 1;
+    font-size: 0.95rem;
+    opacity: 0.95;
+    margin: 0;
+    font-weight: 400;
+}
+
+:host-context(.dark-mode) .form-header {
+    background: radial-gradient(circle at top, #020617 0%, #020617 45%, #022c22 100%);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+}
+
+:host-context(.dark-mode) .form-title {
+    color: #e5f4ff;
+}
+
+:host-context(.dark-mode) .form-subtitle {
+    color: #9ca3af;
+    opacity: 1;
+}
+
+/* ===========================
+   Form Section
+=========================== */
+.meal-form {
+    padding: 2.5rem 2rem;
+    background: var(--surface);
+}
+
+:host-context(.dark-mode) .meal-form {
+    background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), #020617);
+}
+
+/* ===========================
+   Form Groups
+=========================== */
+.form-group {
+    margin-bottom: 1.75rem;
+}
+
+.form-group:last-of-type {
+    margin-bottom: 2rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+    transition: color 0.2s;
+}
+
+:host-context(.dark-mode) .form-label {
+    color: #e5e7eb;
+}
+
+.required-star {
+    color: #ef4444;
+    margin-right: 4px;
+    font-weight: 700;
+}
+
+/* ===========================
+   Input Wrapper
+=========================== */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    right: 1rem;
+    color: #9ca3af;
+    font-size: 1.1rem;
+    z-index: 2;
+    transition: color 0.2s;
+}
+
+.form-input:focus~.input-icon,
+.form-input.valid~.input-icon {
+    color: #10b981;
+}
+
+.form-input.error~.input-icon {
+    color: #ef4444;
+}
+
+.input-suffix {
+    position: absolute;
+    left: 1rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+:host-context(.dark-mode) .input-suffix {
+    color: #9ca3af;
+}
+
+/* ===========================
+   Form Input
+=========================== */
+.form-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 6rem;
+    padding-right: 3rem;
+    font-size: 1rem;
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    color: #111827;
+    font-family: inherit;
+}
+
+.form-input::placeholder {
+    color: #9ca3af;
+}
+
+.form-input:focus {
+    background: #ffffff;
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-input.valid {
+    border-color: #10b981;
+    background: #f0fdf4;
+}
+
+.form-input.error {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+:host-context(.dark-mode) .form-input {
+    background: #0f172a;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+
+:host-context(.dark-mode) .form-input::placeholder {
+    color: #64748b;
+}
+
+:host-context(.dark-mode) .form-input:focus {
+    background: #1e293b;
+    border-color: #10b981;
+}
+
+:host-context(.dark-mode) .form-input.valid {
+    background: #064e3b;
+}
+
+:host-context(.dark-mode) .form-input.error {
+    background: #7f1d1d;
+}
+
+/* ===========================
+   Textarea Wrapper
+=========================== */
+.textarea-wrapper {
+    position: relative;
+}
+
+.textarea-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #9ca3af;
+    font-size: 1.1rem;
+    z-index: 2;
+    transition: color 0.2s;
+}
+
+.form-textarea:focus~.textarea-icon,
+.form-textarea.valid~.textarea-icon {
+    color: #10b981;
+}
+
+.form-textarea.error~.textarea-icon {
+    color: #ef4444;
+}
+
+/* ===========================
+   Form Textarea
+=========================== */
+.form-textarea {
+    width: 100%;
+    padding: 1rem 3rem 1rem 1rem;
+    font-size: 1rem;
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    color: #111827;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+.form-textarea::placeholder {
+    color: #9ca3af;
+}
+
+.form-textarea:focus {
+    background: #ffffff;
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-textarea.valid {
+    border-color: #10b981;
+    background: #f0fdf4;
+}
+
+.form-textarea.error {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+:host-context(.dark-mode) .form-textarea {
+    background: #0f172a;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+
+:host-context(.dark-mode) .form-textarea::placeholder {
+    color: #64748b;
+}
+
+:host-context(.dark-mode) .form-textarea:focus {
+    background: #1e293b;
+    border-color: #10b981;
+}
+
+:host-context(.dark-mode) .form-textarea.valid {
+    background: #064e3b;
+}
+
+:host-context(.dark-mode) .form-textarea.error {
+    background: #7f1d1d;
+}
+
+/* ===========================
+   Error Message
+=========================== */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    color: #ef4444;
+    font-size: 0.875rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+.error-message i {
+    font-size: 0.875rem;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================
+   Help Text
+=========================== */
+.help-text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    color: #6b7280;
+    font-size: 0.8rem;
+}
+
+.help-text i {
+    font-size: 0.75rem;
+}
+
+:host-context(.dark-mode) .help-text {
+    color: #9ca3af;
+}
+
+/* ===========================
+   Submit Button
+=========================== */
+.submit-button {
+    width: 100%;
+    padding: 1.125rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-800) 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.submit-button:hover::before {
+    left: 100%;
+}
+
+.submit-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.submit-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+:host-context(.dark-mode) .submit-button {
+    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    box-shadow: 0 12px 28px rgba(22, 163, 74, 0.55);
+}
+
+:host-context(.dark-mode) .submit-button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #15803d 0%, #16a34a 100%);
+}
+
+.submit-button i {
+    font-size: 1.1rem;
+}
+
+.loading-state {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* ===========================
+   Responsive Design
+=========================== */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .generate-meal-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .form-header {
+        padding: 2rem 1.5rem;
+    }
+
+    .header-icon i {
+        width: 70px;
+        height: 70px;
+        font-size: 2.5rem;
+    }
+
+    .form-title {
+        font-size: 1.75rem;
+    }
+
+    .form-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .meal-form {
+        padding: 2rem 1.5rem;
+    }
+
+    .form-input,
+    .form-textarea {
+        font-size: 0.95rem;
+    }
+
+    .submit-button {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .generate-meal-container {
+        padding: 1rem 0.75rem;
+    }
+
+    .form-wrapper {
+        border-radius: 20px;
+    }
+
+    .form-header {
+        padding: 1.5rem 1rem;
+    }
+
+    .header-icon i {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+    }
+
+    .form-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .meal-form {
+        padding: 1.5rem 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        padding: 0.875rem 0.875rem 0.875rem 5.5rem;
+        padding-right: 2.5rem;
+        font-size: 0.9rem;
+    }
+
+    .input-icon {
+        right: 0.75rem;
+        font-size: 1rem;
+    }
+
+    .input-suffix {
+        left: 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .form-textarea {
+        padding: 0.875rem 2.5rem 0.875rem 0.875rem;
+        font-size: 0.9rem;
+        min-height: 100px;
+    }
+
+    .textarea-icon {
+        top: 0.875rem;
+        right: 0.75rem;
+        font-size: 1rem;
+    }
+
+    .submit-button {
+        padding: 0.95rem 1.25rem;
+        font-size: 0.95rem;
+    }
+
+    .error-message,
+    .help-text {
+        font-size: 0.8rem;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 360px) {
+    .generate-meal-container {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .form-header {
+        padding: 1.25rem 0.75rem;
+    }
+
+    .meal-form {
+        padding: 1.25rem 0.75rem;
+    }
+
+    .form-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* ======================================== */
+/* ================= RESULTS ================= */
+.meals-results {
+    margin-top: 3rem;
+}
+
+.results-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: var(--primary-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+/* ================= CARD ================= */
+.meal-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    transition: transform 0.3s ease;
+}
+
+.meal-card:hover {
+    transform: translateY(-4px);
+}
+
+/* ================= IMAGE ================= */
+.meal-image {
+    position: relative;
+    height: 260px;
+}
+
+.meal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.meal-type {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #22c55e;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* ================= CONTENT ================= */
+.meal-content {
+    padding: 1.5rem 1.8rem;
+}
+
+.meal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.meal-header h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.meal-time {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* ================= NUTRITION ================= */
+.nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.8rem;
+    margin: 1.2rem 0;
+}
+
+.nutrition-item {
+    background: #f8fafc;
+    padding: 0.7rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ================= SECTIONS ================= */
+.meal-section {
+    margin-top: 1.2rem;
+}
+
+.meal-section h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--text-secondary);
+}
+
+.meal-section p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+/* ================= INGREDIENTS ================= */
+.ingredients-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ingredients-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #475569;
+    margin-bottom: 0.4rem;
+}
+
+.ingredient-icon {
+    color: #22c55e;
+    font-size: 0.9rem;
+}
+
+
+.preparation-steps {
+    padding-right: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+.preparation-steps li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    color: #475569;
+}
+
+/* ================= FOOTER ================= */
+.meal-footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #e2e8f0;
+    font-weight: 600;
+    color: #334155;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+    .meal-content {
+        padding: 1.2rem;
+    }
+
+    .meal-image {
+        height: 200px;
+    }
+
+    .meal-header h3 {
+        font-size: 1.2rem;
+    }
+}
+
+
+.save-btn {
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 14px;
+    border: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    transition: 0.3s;
+}
+
+.save-btn:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+:host-context(.dark-mode) .results-title {
+    color: #e5f4ff;
+}
+
+:host-context(.dark-mode) .meal-card {
+    background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), #020617);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(31, 41, 55, 0.9);
+}
+
+:host-context(.dark-mode) .nutrition-item {
+    background: rgba(15, 23, 42, 0.9);
+}
+
+:host-context(.dark-mode) .meal-section h4 {
+    color: #e5e7eb;
+}
+
+:host-context(.dark-mode) .meal-section p,
+:host-context(.dark-mode) .ingredients-list li,
+:host-context(.dark-mode) .preparation-steps li {
+    color: #e5e7eb;
+}
+
+:host-context(.dark-mode) .meal-footer {
+    border-top-color: rgba(51, 65, 85, 0.8);
+    color: #e5e7eb;
+}
+
+:host-context(.dark-mode) .save-btn {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+}
+
+:host-context(.dark-mode) .save-btn:disabled {
+    background: #4b5563;
+}

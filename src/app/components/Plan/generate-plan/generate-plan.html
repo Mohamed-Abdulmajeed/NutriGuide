@@ -1,0 +1,285 @@
+<header dir="rtl" class="text-center mb-10 px-6 py-12 rounded-3xl
+         bg-gradient-to-br from-green-500 to-green-700
+         text-white shadow-2xl animate-fadeInDown">
+    <h1 class="text-3xl md:text-4xl font-extrabold mb-3">
+        توليد خطة غذائية احترافية
+    </h1>
+    <p class="text-base md:text-lg opacity-95 max-w-xl mx-auto leading-relaxed">
+        املأ التفاصيل أدناه، ثم اختر وجباتك.
+    </p>
+</header>
+
+<form #PlanForm="ngForm" (ngSubmit)="generatePlan()" class="form">
+
+    <!-- اسم الخطة -->
+    <div class="form-group full-width">
+        <label class="form-label">اسم الخطة</label>
+        <input type="text" name="planName" class="form-control" required
+            placeholder="مثال: خطة فقدان الوزن - الأسبوع الأول" [(ngModel)]="planName" />
+    </div>
+
+    <!-- التاريخ -->
+    <div class="form-group full-width">
+        <label class="form-label">تاريخ البداية</label>
+        <input type="date" name="date" class="form-control" required placeholder="اختر تاريخ البداية" [(ngModel)]="date"
+            [min]="today" />
+    </div>
+
+
+    <!-- الهدف والنظام الغذائي -->
+    <div class="form-row">
+        <div class="form-group">
+            <label class="form-label">الهدف</label>
+            <select name="goal" class="form-control" required [(ngModel)]="goal">
+                <option value="" disabled selected hidden>اختر الهدف</option>
+                <option *ngFor="let item of allGoalPlans | async" [value]="item.name">
+                    {{ item.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">نوع النظام الغذائي</label>
+            <select name="systemType" class="form-control" required [(ngModel)]="systemType">
+                <option value="" disabled selected hidden>اختر نوع النظام</option>
+                <option *ngFor="let item of allSystemTypePlans | async" [value]="item.name">
+                    {{ item.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <!-- عدد الأيام وعدد الوجبات -->
+    <div class="form-row">
+        <div class="form-group">
+            <label class="form-label">عدد أيام الخطة</label>
+            <select name="numberOfDay" class="form-control" required [(ngModel)]="numberOfDay">
+                <option [ngValue]="null" disabled selected hidden>اختر عدد الأيام</option>
+                <option *ngFor="let num of numberOfDaye" [ngValue]="num">{{ num }} يوم</option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label class="form-label">عدد الوجبات اليومية</label>
+            <select name="numberOfMeal" class="form-control" required [(ngModel)]="numberOfMeal">
+                <option value="" disabled selected hidden>اختر عدد الوجبات</option>
+                <option *ngFor="let m of numberOfMeals" [value]="m">{{ m }}</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- أوقات الوجبات -->
+    <div class="form-group full-width">
+        <label class="form-label">أوقات الوجبات</label>
+        <input type="text" name="mealTimes" class="form-control" required placeholder="مثال: فطار 7ص - غدا 2ظ - عشاء 7م"
+            [(ngModel)]="mealTimes" />
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="PlanForm.invalid || loading">
+        <ng-container *ngIf="loading; else generateText">
+            جاري التوليد. <i class="fas fa-spinner fa-spin"></i>
+        </ng-container>
+        <ng-template #generateText>
+            توليد الخطة
+        </ng-template>
+    </button>
+
+
+</form>
+<!-- ---------------- GENERATED PLAN ------------------- -->
+
+<div *ngFor="let day of mealDaysView" class="day-box">
+
+    <h2 class="day-title">اليوم {{ day.dayNumber }}</h2>
+
+    <!-- فطار -->
+    <h3 class="meal-header">🍳 فطار</h3>
+    <div class="meal-row">
+        <div class="meal-item" *ngFor="let m of day.breakfast; let i = index"
+            [class.active]="isSelected(day.dayNumber,'breakfast', m)"
+            (click)="selectMeal(day.dayNumber,'breakfast', m)">
+            <div class="image-wrapper">
+                <img [src]="m.image" alt="{{ m.name }}" />
+                <span class="meal-type">{{ m.mealType }}</span>
+            </div>
+            <div class="meal-body">
+                <h3 class="meal-name">{{ m.name }}</h3>
+                <div class="calories">
+                    <i class="fa-solid fa-fire"></i> {{ m.calories }} سعرة
+                </div>
+                <div class="macros-grid" aria-label="مكونات غذائية">
+                    <div class="macro-card" aria-label="بروتين">
+                        <div class="macro-icon"><i class="fa-solid fa-drumstick-bite" aria-hidden="true"></i></div>
+                        <div class="macro-info">
+                            <div class="macro-label">بروتين</div>
+                            <div class="macro-value">{{ m.protein }}g</div>
+                        </div>
+                    </div>
+
+                    <div class="macro-card" aria-label="كربوهيدرات">
+                        <div class="macro-icon"><i class="fa-solid fa-bread-slice" aria-hidden="true"></i></div>
+                        <div class="macro-info">
+                            <div class="macro-label">كربوهيدرات</div>
+                            <div class="macro-value">{{ m.carbs }}g</div>
+                        </div>
+                    </div>
+
+                    <div class="macro-card" aria-label="دهون">
+                        <div class="macro-icon"><i class="fa-solid fa-bacon" aria-hidden="true"></i></div>
+                        <div class="macro-info">
+                            <div class="macro-label">دهون</div>
+                            <div class="macro-value">{{ m.fat }}g</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- غداء -->
+    <h3 class="meal-header">🍽️ غداء</h3>
+    <div class="meal-row">
+        <div class="meal-item" *ngFor="let m of day.lunch; let i = index"
+            [class.active]="isSelected(day.dayNumber,'lunch', m)" (click)="selectMeal(day.dayNumber,'lunch', m)">
+            <div class="image-wrapper">
+                <img [src]="m.image" alt="{{ m.name }}" />
+                <span class="meal-type">{{ m.mealType }}</span>
+            </div>
+            <div class="meal-body">
+                <h3 class="meal-name">{{ m.name }}</h3>
+                <div class="calories">
+                    <i class="fa-solid fa-fire"></i> {{ m.calories }} سعرة
+                </div>
+                <div class="macros-grid" aria-label="مكونات غذائية">
+                    <div class="macro-card" aria-label="بروتين">
+                        <div class="macro-icon"><i class="fa-solid fa-drumstick-bite" aria-hidden="true"></i></div>
+                        <div class="macro-info">
+                            <div class="macro-label">بروتين</div>
+                            <div class="macro-value">{{ m.protein }}g</div>
+                        </div>
+                    </div>
+
+                    <div class="macro-card" aria-label="كربوهيدرات">
+                        <div class="macro-icon"><i class="fa-solid fa-bread-slice" aria-hidden="true"></i></div>
+                        <div class="macro-info">
+                            <div class="macro-label">كربوهيدرات</div>
+                            <div class="macro-value">{{ m.carbs }}g</div>
+                        </div>
+                    </div>
+
+                    <div class="macro-card" aria-label="دهون">
+                        <div class="macro-icon"><i class="fa-solid fa-bacon" aria-hidden="true"></i></div>
+                        <div class="macro-info">
+                            <div class="macro-label">دهون</div>
+                            <div class="macro-value">{{ m.fat }}g</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- وجبة خفيفة -->
+    <div *ngIf="day.snack?.length">
+        <h3 class="meal-header">🍿 وجبة خفيفة</h3>
+        <div class="meal-row">
+            <div class="meal-item" *ngFor="let m of day.snack; let i = index"
+                [class.active]="isSelected(day.dayNumber,'snack', m)" (click)="selectMeal(day.dayNumber,'snack', m)">
+                <div class="image-wrapper">
+                    <img [src]="m.image" alt="{{ m.name }}" />
+                    <span class="meal-type">{{ m.mealType }}</span>
+                </div>
+                <div class="meal-body">
+                    <h3 class="meal-name">{{ m.name }}</h3>
+                    <div class="calories">
+                        <i class="fa-solid fa-fire"></i> {{ m.calories }} سعرة
+                    </div>
+                    <div class="macros-grid" aria-label="مكونات غذائية">
+                        <div class="macro-card" aria-label="بروتين">
+                            <div class="macro-icon"><i class="fa-solid fa-drumstick-bite" aria-hidden="true"></i></div>
+                            <div class="macro-info">
+                                <div class="macro-label">بروتين</div>
+                                <div class="macro-value">{{ m.protein }}g</div>
+                            </div>
+                        </div>
+
+                        <div class="macro-card" aria-label="كربوهيدرات">
+                            <div class="macro-icon"><i class="fa-solid fa-bread-slice" aria-hidden="true"></i></div>
+                            <div class="macro-info">
+                                <div class="macro-label">كربوهيدرات</div>
+                                <div class="macro-value">{{ m.carbs }}g</div>
+                            </div>
+                        </div>
+
+                        <div class="macro-card" aria-label="دهون">
+                            <div class="macro-icon"><i class="fa-solid fa-bacon" aria-hidden="true"></i></div>
+                            <div class="macro-info">
+                                <div class="macro-label">دهون</div>
+                                <div class="macro-value">{{ m.fat }}g</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- عشاء -->
+    <div *ngIf="day.dinner.length">
+        <h3 class="meal-header">🌙 عشاء</h3>
+        <div class="meal-row">
+            <div class="meal-item" *ngFor="let m of day.dinner; let i = index"
+                [class.active]="isSelected(day.dayNumber,'dinner', m)" (click)="selectMeal(day.dayNumber,'dinner', m )">
+                <div class="image-wrapper">
+                    <img [src]="m.image" alt="{{ m.name }}" />
+                    <span class="meal-type">{{ m.mealType }}</span>
+                </div>
+                <div class="meal-body">
+                    <h3 class="meal-name">{{ m.name }}</h3>
+                    <div class="calories">
+                        <i class="fa-solid fa-fire"></i> {{ m.calories }} سعرة
+                    </div>
+                    <div class="macros-grid" aria-label="مكونات غذائية">
+                        <div class="macro-card" aria-label="بروتين">
+                            <div class="macro-icon"><i class="fa-solid fa-drumstick-bite" aria-hidden="true"></i></div>
+                            <div class="macro-info">
+                                <div class="macro-label">بروتين</div>
+                                <div class="macro-value">{{ m.protein }}g</div>
+                            </div>
+                        </div>
+
+                        <div class="macro-card" aria-label="كربوهيدرات">
+                            <div class="macro-icon"><i class="fa-solid fa-bread-slice" aria-hidden="true"></i></div>
+                            <div class="macro-info">
+                                <div class="macro-label">كربوهيدرات</div>
+                                <div class="macro-value">{{ m.carbs }}g</div>
+                            </div>
+                        </div>
+
+                        <div class="macro-card" aria-label="دهون">
+                            <div class="macro-icon"><i class="fa-solid fa-bacon" aria-hidden="true"></i></div>
+                            <div class="macro-info">
+                                <div class="macro-label">دهون</div>
+                                <div class="macro-value">{{ m.fat }}g</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+</div>
+
+<button *ngIf="mealDaysView.length" class="save-btn" [disabled]="isSaving || isSaved" (click)="savePlan()">
+    <span *ngIf="isSaving">جاري الحفظ...</span>
+
+    <span *ngIf="!isSaving && !isSaved && !saveError">حفظ الخطة</span>
+
+    <span *ngIf="!isSaving && isSaved">تم الحفظ </span>
+</button>
+<p *ngIf="saveError" class="text-red-600 mt-2">{{ saveError }}</p>

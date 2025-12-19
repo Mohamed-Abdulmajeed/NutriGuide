@@ -1,0 +1,35 @@
+<div [class.dark-mode]="isDarkMode" class="app-container">
+    <ng-container *ngIf="showLayout; else noLayout">
+
+        <div class="layout-container">
+
+            <!-- ASIDE -->
+            <app-aside-bar class="aside-wrapper" [class.closed]="!isSidebarOpen" [isOpen]="isSidebarOpen"
+                (toggleSidebar)="toggleSidebar()">
+            </app-aside-bar>
+
+            <!-- MAIN CONTENT -->
+            <div class="main-content" [class.full]="!isSidebarOpen">
+
+                <!-- HEADER -->
+                <app-header [pageTitle]="pageTitle" [isDarkMode]="isDarkMode" (toggleDarkMode)="toggleDarkMode()">
+                </app-header>
+
+                <!-- CONTENT -->
+                <div class="content">
+                    <!-- <app-toast></app-toast> -->
+                    <router-outlet></router-outlet>
+                    <app-footer></app-footer>
+                </div>
+
+            </div>
+
+        </div>
+
+    </ng-container>
+
+    <ng-template #noLayout>
+        <!-- <app-toast></app-toast> -->
+        <router-outlet></router-outlet>
+    </ng-template>
+</div>

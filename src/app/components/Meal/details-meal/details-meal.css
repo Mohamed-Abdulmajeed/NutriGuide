@@ -1,0 +1,751 @@
+﻿/* ===========================
+   IMAGE HEADER
+=========================== */
+/* Color variables for light/dark themes */
+:root {
+    --bg: #ffffff;
+    --card-bg: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --accent-bg: rgba(59, 130, 246, 0.1);
+    --accent-text: #1e40af;
+    --action-btn-bg: rgba(255, 255, 255, 0.92);
+    --action-btn-text: #111827;
+    --action-btn-icon: #111827;
+    --macro-value-bg: #ffffff;
+    --macro-value-text: #111827;
+}
+
+/* Dark mode variable overrides when a top-level .dark-mode is applied */
+.dark-mode,
+:root.dark-mode {
+    --bg: #071024;
+    --card-bg: #0b1220;
+    --text: #e6eef6;
+    --muted: #94a3b8;
+    --accent-bg: rgba(59, 130, 246, 0.12);
+    --accent-text: #93c5fd;
+    --action-btn-bg: rgba(255, 255, 255, 0.06);
+    --action-btn-text: #e6eef6;
+    --action-btn-icon: #e6eef6;
+    --macro-value-bg: #0f1724;
+    --macro-value-text: #f1f5f9;
+}
+
+.meal-container {
+    background: var(--bg);
+    color: var(--text);
+    max-width: 980px;
+    margin: 18px auto;
+    padding: 0 16px 28px;
+    /* allow container scrolling on small viewports if needed */
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.meal-header {
+    position: relative;
+}
+
+.header-overlay {
+    position: absolute;
+    inset: 12px 14px auto 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+}
+
+.header-overlay .overlay-left,
+.header-overlay .overlay-right {
+    display: flex;
+    gap: 8px;
+    pointer-events: auto;
+}
+
+.action-btn {
+    background: rgba(255, 255, 255, 0.92);
+    border: none;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    color: rgb(152, 4, 4) !important;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+}
+
+.action-btn i {
+    font-size: 16px;
+    color: rgb(37, 4, 4)404 !important;
+}
+
+/* Favorite button styling */
+.action-btn.fav-btn i.heart-filled {
+    /* color: #ef4444 !important; */
+    animation: heartPop 0.3s ease;
+}
+
+@keyframes heartPop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.meal-header {
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .meal-container {
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    .meal-header .action-btn {
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+    }
+}
+
+.meal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* ØªØ¸Ù‡Ø± Ø§Ù„ØµÙˆØ±Ø© Ø¨Ø§Ù„ÙƒØ§Ù…Ù„ */
+    object-position: center;
+    transition: transform 0.5s ease;
+}
+
+.meal-img:hover {
+    transform: scale(1.05);
+}
+
+.meal-img {
+    display: block;
+    border-radius: 20px;
+}
+
+/* ===========================
+   MEAL INFO
+=========================== */
+.meal-info {
+    text-align: right;
+    margin: 12px 0 20px 0;
+}
+
+.meal-name {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 6px;
+    color: #01060b !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .meal-name {
+        color: #f1f5f9;
+    }
+}
+
+.meal-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    color: #01060b !important;
+}
+
+.meal-meta span {
+    background: var(--accent-bg);
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--accent-text);
+    color: #01060b !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .meal-meta span {
+        background: rgba(59, 130, 246, 0.2);
+        color: #01060b !important;
+    }
+}
+
+/* ===========================
+   MACRO CARDS BELOW IMAGE
+=========================== */
+.macros {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 6px 0 20px 0;
+}
+
+.macro-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: right;
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.08);
+    font-weight: 700;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.macro-icon {
+    display: inline-flex;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+/* Protein Card */
+.macro-card.protein .macro-icon {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+}
+
+/* Carbs Card */
+.macro-card.carbs .macro-icon {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+}
+
+/* Fat Card */
+.macro-card.fat .macro-icon {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(249, 115, 22, 0.3);
+}
+
+/* Calories Card */
+.macro-card.calories .macro-icon {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(34, 197, 94, 0.3);
+}
+
+.macro-card {
+    background: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+    .macro-card {
+        background: #1e293b;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+    }
+
+    .macro-card.protein {
+        background: #7f1d1d;
+        color: #fee2e2;
+    }
+
+    .macro-card.carbs {
+        background: #1e3a8a;
+        color: #dbeafe;
+    }
+
+    .macro-card.fat {
+        background: #7c2d12;
+        color: #fed7aa;
+    }
+
+    .macro-card.calories {
+        background: #166534;
+        color: #dcfce7;
+    }
+}
+
+.macro-label {
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.macro-value {
+    /* ensure macro-value uses theme variables (already defined above) */
+    color: var(--macro-value-text);
+}
+
+.macro-value {
+    color: #1f2937;
+    font-weight: 700;
+}
+
+/* Hover effect */
+.macro-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.macro-value {
+    font-size: 20px;
+    font-weight: 700;
+    display: block;
+}
+
+.macro-label {
+    font-size: 12px;
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+/* خلفيات فاتحة مع خطوط ملونة */
+.protein {
+    background: #fef2f2;
+    color: #7f1d1d;
+    border-left: 4px solid #ef4444;
+}
+
+.carbs {
+    background: #eff6ff;
+    color: #1e3a8a;
+    border-left: 4px solid #3b82f6;
+}
+
+.fat {
+    background: #fff7ed;
+    color: #7c2d12;
+    border-left: 4px solid #f97316;
+}
+
+.calories {
+    background: #f0fdf4;
+    color: #166534;
+    border-left: 4px solid #22c55e;
+}
+
+/* ===========================
+   INGREDIENTS
+=========================== */
+.ingredients-card {
+    margin: 15px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 6px 20px rgba(2, 6, 23, 0.06);
+}
+
+.ingredients {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+.ingredients li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+.ingredients-card h2 {
+    margin-bottom: 6px;
+}
+
+.ingredients {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ingredients li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #f3f4f6;
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+.check svg circle {
+    fill: #e6f4ea;
+    stroke: #16a34a;
+    stroke-width: 2;
+}
+
+.check svg path {
+    stroke: #16a34a;
+    stroke-width: 2;
+}
+
+/* ===========================
+   PREPARATION & BENEFITS
+=========================== */
+.prep-card {
+    background: #fef3c7;
+}
+
+.benefits-card {
+    background: #dbeafe;
+}
+
+.prep-card,
+.benefits-card {
+    margin: 15px;
+    border-radius: 24px;
+    padding: 22px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.prep-card:hover,
+.benefits-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
+
+.section h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #111827;
+}
+
+@media (prefers-color-scheme: dark) {
+    .section h2 {
+        color: #f1f5f9;
+    }
+}
+
+
+@media (prefers-color-scheme: dark) {
+
+    .prep-text,
+    .benefits-text {
+
+
+        @media (prefers-color-scheme: dark) {
+            .muted {
+                color: #94a3b8;
+            }
+        }
+
+        color: #cbd5e1;
+    }
+
+    .prep-card {
+        background: #78350f;
+    }
+
+    .benefits-card {
+        background: #0c4a6e;
+    }
+}
+
+.prep-text,
+.benefits-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #374151;
+}
+
+.muted {
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+    .meal-header {
+        height: 300px;
+    }
+
+    .meal-name {
+        font-size: 24px;
+    }
+
+    .meal-meta {
+        font-size: 12px;
+        gap: 6px;
+    }
+
+    .macros {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .macro-card {
+        padding: 12px 10px;
+    }
+
+    .ingredients {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .meal-header {
+        height: 220px;
+    }
+
+    .meal-name {
+        font-size: 20px;
+    }
+
+    .macro-value {
+        font-size: 16px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .ingredients-list li {
+        color: #cbd5e1;
+    }
+}
+
+
+n.confirm-no {
+    background: #e2e8f0;
+    color: #475569;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+/* ================= INGREDIENTS ================= */
+.ingredients-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ingredients-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #475569;
+    margin-bottom: 0.4rem;
+}
+
+.ingredient-icon {
+    color: #22c55e;
+    font-size: 0.9rem;
+}
+
+
+.preparation-steps {
+    padding-right: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+
+@media (prefers-color-scheme: dark) {
+    .preparation-steps li {
+        color: #cbd5e1;
+    }
+}
+
+.preparation-steps li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    color: #475569;
+}
+
+/* Dark mode via body.dark-mode toggle (used by App toggle button) */
+.host-dark .meal-container,
+:host-context(.dark-mode) .meal-container {
+    background: var(--bg, #0b1220);
+    color: var(--text, #02101e);
+}
+
+:host-context(.dark-mode) .meal-header .action-btn,
+.host-dark .meal-header .action-btn i {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text, #941f1f);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+:host-context(.dark-mode) .meal-name,
+:host-context(.dark-mode) .section h2,
+.host-dark .meal-name,
+.host-dark .section h2 {
+    color: #f1f5f9;
+}
+
+:host-context(.dark-mode) .meal-meta span,
+.host-dark .meal-meta span {
+    background: rgba(59, 130, 246, 0.12);
+    /* color: #93c5fd; */
+}
+
+:host-context(.dark-mode) .macro-card,
+.host-dark .macro-card {
+    background: #0f1724;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+}
+
+:host-context(.dark-mode) .macro-card.protein,
+.host-dark .macro-card.protein {
+    background: #5f1414;
+    color: #fee2e2;
+}
+
+:host-context(.dark-mode) .macro-card.carbs,
+.host-dark .macro-card.carbs {
+    background: #0f2b66;
+    color: #dbeafe;
+}
+
+:host-context(.dark-mode) .macro-card.fat,
+.host-dark .macro-card.fat {
+    background: #5a260e;
+    color: #fed7aa;
+}
+
+:host-context(.dark-mode) .macro-card.calories,
+.host-dark .macro-card.calories {
+    background: #0f3d23;
+    color: #dff7e6;
+}
+
+:host-context(.dark-mode) .macro-label,
+.host-dark .macro-label {
+    color: #cbd5e1;
+}
+
+:host-context(.dark-mode) .macro-value,
+.host-dark .macro-value {
+    color: #f1f5f9;
+}
+
+:host-context(.dark-mode) .ingredients-card,
+:host-context(.dark-mode) .ingredients li,
+.host-dark .ingredients-card,
+.host-dark .ingredients li {
+    background: #0b1220;
+    color: #cbd5e1;
+}
+
+:host-context(.dark-mode) .ingredient-icon,
+.host-dark .ingredient-icon {
+    color: #22c55e;
+}
+
+:host-context(.dark-mode) .preparation-steps li,
+:host-context(.dark-mode) .ingredients-list li,
+:host-context(.dark-mode) .prep-text,
+:host-context(.dark-mode) .benefits-text,
+:host-context(.dark-mode) .muted,
+.host-dark .preparation-steps li,
+.host-dark .ingredients-list li,
+.host-dark .prep-text,
+.host-dark .benefits-text,
+.host-dark .muted {
+    color: #cbd5e1;
+}
+
+:host-context(.dark-mode) .prep-card,
+.host-dark .prep-card {
+    background: #2b1a08;
+}
+
+:host-context(.dark-mode) .benefits-card,
+.host-dark .benefits-card {
+    background: #072e3e;
+}
+
+/* Stronger, component-scoped selectors to override base rules */
+:host(.host-dark) .meal-header .action-btn,
+:host-context(.dark-mode) .meal-header .action-btn {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #e6eef6 !important;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.6) !important;
+}
+
+:host(.host-dark) .meal-info,
+:host-context(.dark-mode) .meal-info {
+    background: transparent !important;
+    color: #e6eef6 !important;
+}
+
+:host(.host-dark) .meal-name,
+:host-context(.dark-mode) .meal-name .meal-meta {
+    color: #f8fafc !important;
+}
+
+
+
+:host(.host-dark) .benefits-card,
+:host-context(.dark-mode) .benefits-card {
+    background: #063244 !important;
+    color: #e6eef6 !important;
+}
+
+:host(.host-dark) .macro-card,
+:host-context(.dark-mode) .macro-card {
+    background: #0b1220 !important;
+    color: #e6eef6 !important;
+}
+
+:host(.host-dark) .macro-card .macro-icon,
+:host-context(.dark-mode) .macro-card .macro-icon {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6) !important;
+}
+
+
+
+/* 3) Make macro-value cell white always (white background for the value) */
+.macro-value {
+    background: var(--macro-value-bg) !important;
+    color: var(--macro-value-text) !important;
+    padding: 6px 8px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* 4) Benefits card: force text to white always */
+.benefits-card h2,
+.benefits-card .benefits-text,
+.benefits-card .muted {
+    color: #ffffff !important;
+}
+
+/* Small visual tweak: ensure fav/share icons remain visible when background is white */
+.meal-header .overlay-right .action-btn i,
+.meal-header .overlay-left .action-btn i {
+    color: inherit !important;
+}

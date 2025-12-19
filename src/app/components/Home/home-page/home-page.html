@@ -1,0 +1,189 @@
+<div class="home-container">
+    <div class="main-content">
+
+        <!-- Greeting Section -->
+        <div class="greeting-section">
+            <div class="greeting-card">
+                <h2 class="greeting-text">
+                    {{ getGreeting() }}، <span *ngIf="userProfile$ | async as profile">{{ profile.name }}</span><span
+                        class="emoji">😊</span>
+                </h2>
+                <p class="greeting-subtitle">اتمنى لك يوما صحيا مليئا بالطاقة والنشاط</p>
+                <div class="plan-overview" *ngIf="currentPlan$ | async as currentPlan">
+                    <div class="plan-details">
+                        <span class="plan-label">الخطة الحالية:</span>
+                        <span class="plan-name">{{ currentPlan.name }}</span>
+                        <button class="view-plan-btn" (click)="navigateToPlanDetails(currentPlan)">
+                            عرض الخطة
+                            الحالية</button>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-section" *ngIf="userProfile$ | async as profile">
+                <div class="stats-grid">
+                    <div class="stat-card stat-card-calories">
+                        <div class="stat-icon"><i class="fa-solid fa-fire"></i></div>
+                        <div class="stat-label">السعرات</div>
+                        <div class="stat-value">{{ profile.calories || 0 }}</div>
+                    </div>
+                    <div class="stat-card stat-card-weight">
+                        <div class="stat-icon"><i class="fa-solid fa-weight-scale"></i></div>
+                        <div class="stat-label">الوزن</div>
+                        <div class="stat-value">{{ profile.weight }}</div>
+                    </div>
+                    <div class="stat-card stat-card-ideal">
+                        <div class="stat-icon"><i class="fa-solid fa-bullseye"></i></div>
+                        <div class="stat-label">الوزن المثالي</div>
+                        <div class="stat-value">{{ profile.idealWeight || 0 }}</div>
+                    </div>
+                    <div class="stat-card stat-card-metabolic">
+                        <div class="stat-icon"><i class="fa-solid fa-heartbeat"></i></div>
+                        <div class="stat-label">الأيض</div>
+                        <div class="stat-value">{{ profile.bmr || 0 }}</div>
+                    </div>
+                    <div class="stat-card stat-card-weight2">
+                        <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <div class="stat-label">BMI</div>
+                        <div class="stat-value">{{ profile.bmi || 0 }}</div>
+                    </div>
+                </div>
+
+                <!-- Weight Tracking Section -->
+                <div class="weight-card">
+
+                    <div class="weight-card-header">
+                        <h3>تتبع الوزن</h3>
+
+                        <div class="tracking-controls">
+                            <button class="tracking-btn" [class.active]="weightTrackingType === 'monthly'"
+                                (click)="toggleTrackingType('monthly')">
+                                شهري
+                            </button>
+
+                            <button class="tracking-btn" [class.active]="weightTrackingType === 'weekly'"
+                                (click)="toggleTrackingType('weekly')">
+                                أسبوعي
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chart-wrapper">
+                        <!-- Y-Axis (الأوزان) -->
+                        <div class="y-axis" *ngIf="weightTracking$ | async as weights">
+                            <span>{{ getMaxWeight(weights) | number:'1.0-0' }}</span>
+                            <span>{{ (getMaxWeight(weights) + getMinWeight(weights)) / 2 | number:'1.0-0' }}</span>
+                            <span>{{ getMinWeight(weights) | number:'1.0-0' }}</span>
+                        </div>
+
+                        <!-- Scrollable Chart + X-Axis -->
+                        <div class="chart-scroll-wrapper">
+                            <svg class="weight-chart" viewBox="0 0 600 200" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+
+                                <!-- GRID BACKGROUND -->
+                                <g class="grid">
+                                    <line *ngFor="let x of [80,160,240,320,400,480]" [attr.x1]="x" y1="0" [attr.x2]="x"
+                                        y2="200" stroke="#cbd5e1" stroke-width="1" />
+                                    <line *ngFor="let y of [40,80,120,160]" x1="0" [attr.y1]="y" x2="600" [attr.y2]="y"
+                                        stroke="#cbd5e1" stroke-width="1" />
+                                </g>
+
+                                <!-- Chart Line -->
+                                <polyline *ngIf="weightTracking$ | async as weights"
+                                    [attr.points]="getChartPoints(weights)" fill="none" stroke="url(#lineGradient)"
+                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+
+                            <!-- X-Axis (الأيام) -->
+                            <div class="x-axis" *ngIf="weightTracking$ | async as weights">
+                                <span *ngFor="let w of weights">{{ w.date | date:'MM/dd' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+
+                <!-- Daily Meals Section -->
+                <div class="meals-section">
+                    <h3 class="section-title">الوجبات اليومية</h3>
+                    <div class="meals-scroll-container">
+                        <div class="meals-grid" *ngIf="filteredMeals$ | async as meals; ">
+                            <div class="meal-card" *ngFor="let meal of meals">
+                                <img [src]="meal.image || 'https://via.placeholder.com/300'" [alt]="meal.name"
+                                    class="meal-image">
+                                <div class="meal-content">
+                                    <h4 class="meal-title">{{ meal.name }}</h4>
+                                    <div class="meal-calories">
+                                        <i class="fa-solid fa-fire"></i>
+                                        <span>{{ meal.calories || 0 }}</span>
+                                    </div>
+                                    <div class="meal-nutrition">
+                                        <div class="nutrient-card">
+                                            <i class="fa-solid fa-droplet"></i>
+                                            <span class="nutrient-label">دهون</span>
+                                            <span class="nutrient-value">{{ meal.fat || 0 }}g</span>
+                                        </div>
+                                        <div class="nutrient-card">
+                                            <i class="fa-solid fa-egg"></i>
+                                            <span class="nutrient-label">بروتين</span>
+                                            <span class="nutrient-value">{{ meal.protein || 0 }}g</span>
+                                        </div>
+                                        <div class="nutrient-card">
+                                            <i class="fa-solid fa-wheat-awn"></i>
+                                            <span class="nutrient-label">كربوهيدرات</span>
+                                            <span class="nutrient-value">{{ meal.carbs || 0 }}g</span>
+                                        </div>
+                                    </div>
+                                    <div class="meal-actions">
+                                        <button class="btn-details" (click)="navigateToMealDetails(meal)">
+                                            <i class="fa-solid fa-info-circle"></i>
+                                            تفاصيل
+                                        </button>
+                                        <button class="btn-alternatives" (click)="navigateToAlternatives(meal)">
+                                            <i class="fa-solid fa-arrows-spin"></i>
+                                            بدائل
+                                        </button>
+                                        <button class="fav-btn" (click)="toggleFavorite(meal)">
+                                            <i class="fa-solid"
+                                                [ngClass]="isFavorite(meal.id) ? 'fa-heart active-heart' : 'fa-heart-circle-plus'"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--  -->
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="confirmModal" class="confirm-overlay hidden">
+    <div class="confirm-box">
+
+        <h3>هل تريد حذف الوجبة من المفضلة؟</h3>
+
+        <div class="modal-actions">
+            <button class="confirm-yes" (click)="confirmDelete()">حذف</button>
+            <button class="confirm-no" (click)="closeConfirm()">إلغاء</button>
+        </div>
+
+    </div>
+</div>

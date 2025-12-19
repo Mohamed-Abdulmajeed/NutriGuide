@@ -1,0 +1,336 @@
+<div class="admin-dashboard">
+    <!-- Header -->
+    <header class="dashboard-header">
+        <h1><i class="fas fa-tachometer-alt"></i> لوحة تحكم الأدمن</h1>
+        <div class="header-actions">
+            <button class="btn btn-filter" routerLink="/admin-setting">
+                <i class="fas fa-cog"></i>
+                إعدادات الأدمن
+            </button>
+        </div>
+    </header>
+    <div *ngIf="errorMessages.length" class="admin-errors">
+        <ul>
+            <li *ngFor="let e of errorMessages">{{ e }}</li>
+        </ul>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-container">
+        <div class="stat-card customers">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ statsLoaded ? stats.totalCustomers : '...' }}</h3>
+                <p>إجمالي العملاء</p>
+            </div>
+        </div>
+
+        <div class="stat-card meals">
+            <div class="stat-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ statsLoaded ? stats.totalMeals : '...' }}</h3>
+                <p>الوجبات المفضلة</p>
+            </div>
+        </div>
+
+        <!-- removed totalPlans card as requested -->
+
+        <div class="stat-card shopping">
+            <div class="stat-icon">
+                <i class="fas fa-fire"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ statsLoaded ? (stats.avgMealCalories + ' kcal') : '...' }}</h3>
+                <p>متوسط سعرات الوجبات المفضلة</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="dashboard-tabs">
+        <button class="tab-btn" [class.active]="selectedTab === 'customers'" (click)="selectTab('customers')">
+            <i class="fas fa-users"></i> العملاء
+        </button>
+        <button class="tab-btn" [class.active]="selectedTab === 'meals'" (click)="selectTab('meals')">
+            <i class="fas fa-utensils"></i> الوجبات
+        </button>
+        <button class="tab-btn" [class.active]="selectedTab === 'shopping'" (click)="selectTab('shopping')">
+            <i class="fas fa-shopping-cart"></i> قائمة التسوق
+        </button>
+        <button class="tab-btn" [class.active]="selectedTab === 'diseases'" (click)="selectTab('diseases')">
+            <i class="fas fa-heartbeat"></i> الأمراض
+        </button>
+        <button class="tab-btn" [class.active]="selectedTab === 'avoidFoods'" (click)="selectTab('avoidFoods')">
+            <i class="fas fa-ban"></i> الأطعمة الممنوعة
+        </button>
+        <button class="tab-btn" [class.active]="selectedTab === 'medicines'" (click)="selectTab('medicines')">
+            <i class="fas fa-pills"></i> الأدوية
+        </button>
+    </nav>
+
+    <!-- Tab Content -->
+    <div *ngIf="!statsLoaded" class="admin-loading">
+        <p>جارٍ تحميل البيانات... الرجاء الانتظار</p>
+    </div>
+    <div class="tab-content">
+
+        <!-- Customers Tab -->
+        <div *ngIf="selectedTab === 'customers'" class="customers-tab">
+            <h2><i class="fas fa-users"></i> إحصائيات العملاء</h2>
+            <div class="customer-stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <h3 style="color: black;">{{ customerStats.total }}</h3>
+                        <p>إجمالي العملاء</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-birthday-cake"></i></div>
+                    <div class="stat-info">
+                        <h3 style="color: black;">{{ customerStats.avgAge }} سنة</h3>
+                        <p>متوسط الأعمار</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-weight"></i></div>
+                    <div class="stat-info">
+                        <h3 style="color: black;">{{ customerStats.avgWeight }} كجم</h3>
+                        <p>متوسط الأوزان</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-ruler-vertical"></i></div>
+                    <div class="stat-info">
+                        <h3 style="color: black;">{{ customerStats.avgHeight }} سم</h3>
+                        <p>متوسط الطول</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-heartbeat"></i></div>
+                    <div class="stat-info">
+                        <h3 style="color: black;">{{ customerStats.avgBmi }}</h3>
+                        <p>متوسط الـ BMI</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                    <div class="stat-info">
+                        <h3 style="color: black;">{{ customerStats.avgCalories }}</h3>
+                        <p>متوسط السعرات</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-running"></i></div>
+                    <div class="stat-info">
+                        <h3 style="color: black;">{{ customerStats.avgActivity }}</h3>
+                        <p>متوسط مستوى النشاط</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-venus-mars"></i></div>
+                    <div class="stat-info">
+                        <h3 style="color: black;">{{ customerStats.maleCount }} / {{ customerStats.femaleCount }}</h3>
+                        <p>ذكر / أنثى</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meals Tab -->
+        <div *ngIf="selectedTab === 'meals'" class="meals-tab">
+            <h2><i class="fas fa-utensils"></i> الوجبات المفضلة</h2>
+            <p style="margin-bottom: 16px; color:#6b7280;">
+                قائمة بالوجبات المفضلة مرتبة من الأكثر تكراراً، مع عدد مرات تفضيل كل وجبة.
+            </p>
+
+            <div class="meals-container">
+                <ng-container *ngIf="mealStats.length; else noMeals">
+                    <div class="meal-card" *ngFor="let item of mealStats">
+                        <div class="meal-image">
+                            <img [src]="item.meal.image" [alt]="item.meal.name" title="صورة الوجبة المفضلة">
+                            <span class="meal-type">{{ item.meal.mealType }}</span>
+                        </div>
+                        <div class="meal-content">
+                            <h3>{{ item.meal.name }}</h3>
+                            <p class="meal-description">
+                                {{ item.meal.preparation | slice:0:100 }}...
+                            </p>
+                            <p style="font-size: 13px; color:#16a34a; font-weight:600; margin-bottom:8px;">
+                                مفضلة {{ item.count }} مرة
+                            </p>
+                            <div class="meal-nutrition">
+                                <div class="nutrition-item">
+                                    <i class="fas fa-fire"></i>
+                                    <span>{{ item.meal.calories }} سعرة</span>
+                                </div>
+                                <div class="nutrition-item">
+                                    <i class="fas fa-drumstick-bite"></i>
+                                    <span>{{ item.meal.protein }} جرام بروتين</span>
+                                </div>
+                                <div class="nutrition-item">
+                                    <i class="fas fa-bread-slice"></i>
+                                    <span>{{ item.meal.carbs }} جرام كربوهيدرات</span>
+                                </div>
+                                <div class="nutrition-item">
+                                    <i class="fas fa-oil-can"></i>
+                                    <span>{{ item.meal.fat }} جرام دهون</span>
+                                </div>
+                            </div>
+                            <div class="meal-actions">
+                                <button class="btn btn-view" (click)="openMealDetails(item.meal)">
+                                    <i class="fas fa-eye"></i> التفاصيل
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-template #noMeals>
+                    <div class="no-data">
+                        <p>لا توجد وجبات مفضلة حتى الآن</p>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+
+        <!-- Shopping List Tab -->
+        <div *ngIf="selectedTab === 'shopping'" class="shopping-tab">
+            <h2><i class="fas fa-shopping-cart"></i> المنتجات المطلوبة وإحصائياتها</h2>
+            <div class="shopping-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="ابحث عن مكون..." [(ngModel)]="shoppingQuery"
+                        (input)="applyShoppingFilter()">
+                </div>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <label style="font-size:13px; color:#6b7280;">فرز:</label>
+                    <select [(ngModel)]="shoppingSort" (change)="applyShoppingFilter()" class="form-control"
+                        title="اختيار طريقة الفرز" style="padding:6px; border-radius:6px;">
+                        <option value="count">حسب التكرار</option>
+                        <option value="amount">حسب الكمية</option>
+                        <option value="name">حسب الاسم</option>
+                    </select>
+                </div>
+            </div>
+            <div class="products-stats">
+                <h3>المنتجات المطلوبة (مجمعة)</h3>
+                <div class="products-cards">
+                    <ng-container *ngIf="filteredProductsStats.length; else noProducts">
+                        <div class="product-card" *ngFor="let p of filteredProductsStats">
+                            <div class="product-name">{{ p.name }}</div>
+                            <div class="product-amount">{{ p.totalAmount }} {{ p.unit }}</div>
+                            <div class="product-count">مطلوبة {{ p.count }} مرة</div>
+                            <div class="product-bar">
+                                <div class="bar-fill" [style.width.%]="(p.count / productsMaxCount) * 100"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #noProducts>
+                        <div class="no-data">لا توجد بيانات</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diseases Tab -->
+        <div *ngIf="selectedTab === 'diseases'" class="health-tab">
+            <h2><i class="fas fa-heartbeat"></i> إحصائيات الأمراض</h2>
+            <div class="health-card">
+                <div class="health-card-header">
+                    <i class="fas fa-heartbeat"></i>
+                    <h3>الأمراض الأكثر تكراراً</h3>
+                </div>
+                <div class="health-card-content">
+                    <ng-container *ngIf="diseasesStats.length; else noDisease">
+                        <ul class="health-list">
+                            <li *ngFor="let d of diseasesStats" class="health-row">
+                                <div class="health-name">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <span>{{ d.name }}</span>
+                                </div>
+                                <div class="health-count">
+                                    <span>متكررة {{ d.count }} مرة</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </ng-container>
+                    <ng-template #noDisease>
+                        <div class="no-data">لا توجد بيانات عن الأمراض</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avoid Foods Tab -->
+        <div *ngIf="selectedTab === 'avoidFoods'" class="health-tab">
+            <h2><i class="fas fa-ban"></i> الأطعمة الممنوعة</h2>
+            <div class="health-card">
+                <div class="health-card-header">
+                    <i class="fas fa-ban"></i>
+                    <h3>الأطعمة الأكثر تكراراً في المنع</h3>
+                </div>
+                <div class="health-card-content">
+                    <ng-container *ngIf="avoidFoodsStats.length; else noAvoid">
+                        <ul class="health-list">
+                            <li *ngFor="let f of avoidFoodsStats" class="health-row">
+                                <div class="health-name">
+                                    <i class="fas fa-times-circle"></i>
+                                    <span>{{ f.name }}</span>
+                                </div>
+                                <div class="health-count">
+                                    <span>متكررة {{ f.count }} مرة</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </ng-container>
+                    <ng-template #noAvoid>
+                        <div class="no-data">لا توجد بيانات عن الأطعمة الممنوعة</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medicines Tab -->
+        <div *ngIf="selectedTab === 'medicines'" class="health-tab">
+            <h2><i class="fas fa-pills"></i> الأدوية</h2>
+            <div class="health-card">
+                <div class="health-card-header">
+                    <i class="fas fa-pills"></i>
+                    <h3>الأدوية الأكثر استخداماً</h3>
+                </div>
+                <div class="health-card-content">
+                    <ng-container *ngIf="medicinesStats.length; else noMedicines">
+                        <ul class="health-list">
+                            <li *ngFor="let m of medicinesStats" class="health-row">
+                                <div class="health-name">
+                                    <i class="fas fa-capsules"></i>
+                                    <span>{{ m.name }}</span>
+                                </div>
+                                <div class="health-count">
+                                    <span>متكررة {{ m.count }} مرة</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </ng-container>
+                    <ng-template #noMedicines>
+                        <div class="no-data">لا توجد بيانات عن الأدوية</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

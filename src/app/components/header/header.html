@@ -1,0 +1,21 @@
+<header class="app-header" dir="ltr">
+    <div class="header-content">
+        <!-- Left Section: Actions -->
+        <div class="header-right">
+            <button (click)="navigateTo('profile')" class="btn-icon profile-btn"
+                [class.active]="currentPage === 'profile'" title="الملف الشخصي">
+                <i class="fas fa-user"></i>
+            </button>
+
+            <button (click)="toggleDarkMode.emit()" class="btn-icon theme-toggle" title="تبديل الوضع الليلي"
+                [attr.aria-label]="isDarkMode ? 'الوضع النهاري' : 'الوضع الليلي'">
+                <i class="fas" [ngClass]="{'fa-sun': isDarkMode, 'fa-moon': !isDarkMode}"></i>
+            </button>
+        </div>
+
+        <!-- Right Section: Page Title -->
+        <div class="header-left">
+            <h4 class="page-title">{{ pageTitle }}</h4>
+        </div>
+    </div>
+</header>

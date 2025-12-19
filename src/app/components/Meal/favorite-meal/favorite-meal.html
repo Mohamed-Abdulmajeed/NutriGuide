@@ -1,0 +1,111 @@
+<div class="favorites-container">
+    <div class="favorites-content">
+        <h2 class="favorites-title">
+            <i class="fas fa-heart"></i>
+            الوجبات المفضلة
+        </h2>
+
+        <div *ngIf="AllFavorite$ | async as meals; else noFavorites">
+            <div class="favorites-grid" *ngIf="meals.length > 0; else noFavorites">
+                <div class="favorite-meal-card" *ngFor="let meal of meals.slice().reverse()">
+                    <div class="meal-image-wrapper">
+                        <img [src]="meal.image || 'https://via.placeholder.com/300'" [alt]="meal.name"
+                            class="meal-img" />
+                        <button class="delete-btn" (click)="deleteFromFavorite(meal.id)" title="حذف من المفضلة">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+
+                    <div class="meal-info">
+                        <div class="meal-header">
+                            <h3 class="meal-name">
+                                <i class="fas fa-utensils"></i>
+                                {{ meal.name }}
+                            </h3>
+                            <span class="meal-type-badge">
+                                <i class="fas fa-tag"></i>
+                                {{ meal.mealType }}
+                            </span>
+                        </div>
+
+                        <div class="meal-quick-info">
+
+
+                            <div class="nutrition-card">
+                                <div class="nutrition-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <span class="nutrition-label">السعرات</span>
+                                <span class="nutrition-value">{{ meal.calories || 0 }}g</span>
+                            </div>
+                            <div class="nutrition-card">
+                                <div class="nutrition-icon">
+                                    <i class="fas fa-dumbbell"></i>
+                                </div>
+                                <span class="nutrition-label">البروتين</span>
+                                <span class="nutrition-value">{{ meal.protein || 0 }}g</span>
+                            </div>
+                            <div class="nutrition-card">
+                                <div class="nutrition-icon">
+                                    <i class="fas fa-bread-slice"></i>
+                                </div>
+                                <span class="nutrition-label">الكربوهيدرات</span>
+                                <span class="nutrition-value">{{ meal.carbs || 0 }}g</span>
+                            </div>
+                            <div class="nutrition-card">
+                                <div class="nutrition-icon">
+                                    <i class="fas fa-droplet"></i>
+                                </div>
+                                <span class="nutrition-label">الدهون</span>
+                                <span class="nutrition-value">{{ meal.fat || 0 }}g</span>
+                            </div>
+                        </div>
+
+
+
+                        <p class="meal-benefits" *ngIf="meal.healthBenefits">
+                            <i class="fas fa-leaf"></i>
+                            <strong>الفوائد:</strong> {{ meal.healthBenefits| slice:0:80 }}
+                        </p>
+
+                        <div class="meal-actions">
+                            <button class="btn-details" (click)="navigateToMealDetails(meal)" title="عرض التفاصيل">
+                                <i class="fas fa-arrow-right"></i>
+                                التفاصيل
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #noFavorites>
+            <div class="no-favorites">
+                <i class="fas fa-heart-broken"></i>
+                <p>لا توجد وجبات مفضلة</p>
+                <span class="empty-subtitle">ابدأ بإضافة وجباتك المفضلة الآن</span>
+            </div>
+        </ng-template>
+    </div>
+
+</div>
+
+<div id="confirmModal" class="confirm-overlay hidden">
+    <div class="confirm-box">
+        <h3>
+            <i class="fas fa-exclamation-circle"></i>
+            هل تريد حذف الوجبة من المفضلة؟
+        </h3>
+
+        <div class="modal-actions">
+            <button class="confirm-yes" (click)="confirmDelete()" title="تأكيد الحذف">
+                <i class="fas fa-trash-alt"></i>
+                حذف
+            </button>
+            <button class="confirm-no" (click)="closeConfirm()" title="إلغاء">
+                <i class="fas fa-times-circle"></i>
+                إلغاء
+            </button>
+        </div>
+    </div>
+</div>

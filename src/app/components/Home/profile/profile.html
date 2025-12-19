@@ -1,0 +1,524 @@
+<div class="container py-4">
+    @if (currentCustomer$ | async; as customer) {
+    <div class="profile-container">
+        <!-- ======================== -->
+        <div class="col-12">
+            <div class="profile-wrapper">
+
+                <!-- Avatar -->
+                <div class="profile-avatar-card">
+                    <div class="avatar-ring">
+                        <img src="https://www.shareicon.net/data/128x128/2016/05/24/770117_people_512x512.png"
+                            alt="Profile">
+                    </div>
+                    <h2 class="profile-name">{{ customer.name }}</h2>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="profile-info-grid">
+
+                    <!-- Email Card (Wide) -->
+                    <div class="info-card email-card">
+                        <i class="bi bi-envelope-at"></i>
+                        <div>
+                            <span class="label">البريد الإلكتروني</span>
+                            <span class="value email-value">{{ customer.email }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="info-card">
+                        <i class="bi bi-telephone"></i>
+                        <div>
+                            <span class="label">رقم الهاتف</span>
+                            <span class="value">{{ customer.phone }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Personal Info -->
+                    <div class="info-card">
+                        <i class="bi bi-person-badge"></i>
+                        <div>
+                            <span class="label">البيانات الشخصية</span>
+                            <span class="value">{{ customer.age }} سنة • {{ customer.gender }}</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ==================================== -->
+
+        <div class="row mb-4 g-4 metric-row">
+
+            <!-- Height -->
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="metric-card height-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">
+                            <i class="bi bi-arrows-vertical"></i>
+                        </div>
+                        <h6>الطول</h6>
+                    </div>
+
+                    <div class="metric-value">
+                        {{ customer.height }}
+                        <span>سم</span>
+                    </div>
+
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#editHeightModal" class="metric-btn">
+                        <i class="bi bi-pencil-fill"></i>
+                        تحديث
+                    </button>
+                </div>
+            </div>
+
+            <!-- Weight -->
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="metric-card weight-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+                        <h6>الوزن الحالي</h6>
+                    </div>
+
+                    <div class="metric-value">
+                        {{ customer.weight | number : '1.2-2' }}
+                        <span>كجم</span>
+                    </div>
+
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#editWeightModal"
+                        class="metric-btn text-center">
+                        <i class="bi bi-pencil-fill"></i>
+                        تحديث
+                    </button>
+                </div>
+            </div>
+
+            <!-- Activity -->
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="metric-card activity-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">
+                            <i class="bi bi-activity"></i>
+                        </div>
+                        <h6>مستوى النشاط</h6>
+                    </div>
+
+                    <div class="metric-value text-xs">
+                        {{ getActivityLabel(customer.activityLevel) }}
+                    </div>
+
+
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#editActivityModal" class="metric-btn">
+                        <i class="bi bi-pencil-fill"></i>
+                        تحديث
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ========================== -->
+        <div class="stats-grid">
+            <div class="stat-card stat-card-calories">
+                <div class="stat-icon"><i class="fa-solid fa-fire"></i></div>
+                <div class="stat-label">السعرات</div>
+                <div class="stat-value">{{ customer.calories || 0 }}</div>
+            </div>
+
+            <div class="stat-card stat-card-ideal">
+                <div class="stat-icon"><i class="fa-solid fa-bullseye"></i></div>
+                <div class="stat-label">الوزن المثالي</div>
+                <div class="stat-value">{{ customer.idealWeight || 0 }}</div>
+            </div>
+            <div class="stat-card stat-card-metabolic">
+                <div class="stat-icon"><i class="fa-solid fa-heartbeat"></i></div>
+                <div class="stat-label">الأيض</div>
+                <div class="stat-value">{{ customer.bmr || 0 }}</div>
+            </div>
+            <div class="stat-card stat-card-weight2">
+                <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="stat-label">BMI</div>
+                <div class="stat-value">{{ customer.bmi || 0 }}</div>
+            </div>
+        </div>
+
+
+        <!-- ====================== -->
+
+        <h1 class="mb-4 text-secondary fw-bold"> التفاصيل الصحية والغذائية</h1>
+
+        <div class="row g-4">
+
+            <!-- ================== MEDICINES ================== -->
+            <div class="col-12">
+                <div class="card details-card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <span class="fw-bold"> الأدوية الحالية</span>
+                        <button type="button" class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal"
+                            data-bs-target="#addMedicineModal">
+                            <i class="bi bi-plus-lg me-1"></i> إضافة
+                        </button>
+                    </div>
+
+                    <div class="card-body">
+                        @for (med of customer.medicines; track med.medicineName) {
+                        <div class="list-item success">
+                            <div class="item-content">
+                                <div class="item-title">
+                                    <i class="bi bi-capsule me-1"></i>
+                                    {{ med.medicineName }}
+                                </div>
+
+                                <div class="item-meta">
+                                    <span class="badge bg-success-subtle text-success">
+                                        {{ med.option }}
+                                    </span>
+                                    <span class="badge bg-success-subtle text-success">
+                                        {{ med.times.join(', ') }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="action-btn danger" (click)="deleteMedicine(med.medicineName)">
+                                    <i class="bi bi-trash"></i>
+                                    <span>حذف</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================== DISEASES ================== -->
+            <div class="col-12">
+                <div class="card details-card border-0 shadow-sm">
+                    <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                        <span class="fw-bold"> الأمراض المزمنة</span>
+                        <button type="button" class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal"
+                            data-bs-target="#addDiseaseModal">
+                            <i class="bi bi-plus-lg me-1"></i> إضافة
+                        </button>
+                    </div>
+
+                    <div class="card-body">
+                        @for (disease of customer.chronicDiseases; track disease) {
+                        <div class="list-item danger">
+                            <div class="item-content">
+                                <div class="item-title">
+                                    <i class="bi bi-heart-pulse me-1"></i>
+                                    {{ disease }}
+                                </div>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="action-btn secondary" data-bs-toggle="modal"
+                                    data-bs-target="#editDiseaseModal" (click)="selectedDisease = disease">
+                                    <i class="bi bi-pencil-square"></i>
+                                    <span>تعديل</span>
+                                </button>
+
+                                <button class="action-btn danger" (click)="deleteDisease(disease)">
+                                    <i class="bi bi-trash"></i>
+                                    <span>حذف</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================== AVOID FOODS ================== -->
+            <div class="col-12">
+                <div class="card details-card border-0 shadow-sm">
+                    <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                        <span class="fw-bold"> أطعمة يجب تجنبها</span>
+                        <button type="button" class="btn btn-light btn-sm rounded-pill px-3" data-bs-toggle="modal"
+                            data-bs-target="#addAvoidFoodModal">
+                            <i class="bi bi-plus-lg me-1"></i> إضافة
+                        </button>
+                    </div>
+
+                    <div class="card-body">
+                        @for (food of customer.avoidFoods; track food) {
+                        <div class="list-item warning">
+                            <div class="item-content">
+                                <div class="item-title">
+                                    <i class="bi bi-slash-circle me-1"></i>
+                                    {{ food }}
+                                </div>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="action-btn secondary" data-bs-toggle="modal"
+                                    data-bs-target="#editAvoidFoodModal" (click)="selectedAvoidFood = food">
+                                    <i class="bi bi-pencil-square"></i>
+                                    <span>تعديل</span>
+                                </button>
+
+                                <button class="action-btn danger" (click)="deleteAvoidFood(food)">
+                                    <i class="bi bi-trash"></i>
+                                    <span>حذف</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!--======================= -->
+    </div>
+    } @else {
+    <div class="text-center p-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">جاري تحميل بيانات المستخدم...</p>
+    </div>
+    }
+</div>
+
+<div id="editHeightModal" tabindex="-1" aria-labelledby="editHeightModalLabel" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog" dir="rtl">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white d-flex justify-content-between">
+                <h5 id="editHeightModalLabel" class="modal-title">تعديل الطول (سم)</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="newHeight" class="form-label">الطول الجديد</label>
+                    <input type="number" id="newHeight" class="form-control" #newHeightInput />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">إلغاء</button>
+                <button type="button" class="btn btn-info" (click)="updateHeight(+newHeightInput.value)">
+                    حفظ التعديل
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editWeightModal" tabindex="-1" aria-labelledby="editWeightModalLabel" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog" dir="rtl">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white d-flex justify-content-between">
+                <h5 id="editWeightModalLabel" class="modal-title">تعديل الوزن (كجم)</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="newWeight" class="form-label">الوزن الجديد</label>
+                    <input type="number" id="newWeight" class="form-control" #newWeightInput />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">إلغاء</button>
+                <button type="button" class="btn btn-info" (click)="updateWeight(+newWeightInput.value)">
+                    حفظ التعديل
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editActivityModal" tabindex="-1" aria-labelledby="editActivityModalLabel" aria-hidden="true"
+    class="modal fade">
+    <div class="modal-dialog" dir="rtl">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white d-flex justify-content-between">
+                <h5 id="editActivityModalLabel" class="modal-title">تعديل مستوى النشاط</h5>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="newActivity" class="form-label">مستوى النشاط الجديد</label>
+                    <select id="newActivity" class="form-select" #newActivitySelect>
+                        <option *ngFor="let level of activityLevels" [value]="level.value">
+                            {{ level.label }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">إلغاء</button>
+                <button type="button" class="btn btn-info" (click)="updateActivity(+newActivitySelect.value)">
+                    حفظ التعديل
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================ -->
+<div id="addMedicineModal" tabindex="-1" aria-labelledby="addMedicineModalLabel" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog" dir="rtl">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white d-flex justify-content-between">
+                <h5 id="addMedicineModalLabel" class="modal-title">إضافة دواء جديد</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="medicineName" class="form-label">اسم الدواء</label>
+                    <input type="text" id="medicineName" class="form-control" #medicineNameInput />
+                </div>
+                <div class="mb-3">
+                    <label for="medOption" class="form-label">الخيار (قبل/مع/بعد الطعام)</label>
+                    <select id="medOption" class="form-select" #medOptionInput>
+                        <option value="After-Food">بعد الطعام</option>
+                        <option value="Before-Food">قبل الطعام</option>
+                        <option value="Before-Food">مع الطعام</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="medTime" class="form-label">توقيتات أخذ الدواء (يمكن إضافة أكثر من وقت)</label>
+                    <div class="input-group mb-2">
+                        <input type="time" id="medTime" class="form-control" #medTimeInput />
+                        <button type="button" class="btn btn-outline-success"
+                            (click)="addTimeToMedicines(medTimeInput.value)">
+                            <i class="bi bi-plus-lg"></i> إضافة وقت
+                        </button>
+                    </div>
+                    @if (medicineTimes && medicineTimes.length > 0) {
+                    <div class="d-flex flex-wrap gap-2">
+                        @for (time of medicineTimes; track time) {
+                        <span class="badge bg-success d-flex align-items-center gap-2">
+                            {{ time }}
+                            <button type="button" class="btn btn-sm btn-link text-white p-0"
+                                (click)="removeTimeFromMedicines(time)">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </span>
+                        }
+                    </div>
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">إلغاء</button>
+                <button type="button" class="btn btn-success"
+                    (click)="addMedicine(medicineNameInput.value, medOptionInput.value, medicineTimes)">
+                    إضافة
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editDiseaseModal" tabindex="-1" aria-labelledby="editDiseaseModalLabel" aria-hidden="true">
+    <div class="modal-dialog" dir="rtl">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white d-flex justify-content-between">
+                <h5 class="modal-title" id="editDiseaseModalLabel">تعديل اسم المرض</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="newDiseaseName" class="form-label">الاسم الجديد للمرض</label>
+                    <input type="text" class="form-control" id="newDiseaseName" #editedDiseaseInput
+                        [value]="selectedDisease" />
+                    <small class="form-text text-muted">المرض الحالي: {{ selectedDisease }}</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                <button type="button" class="btn btn-danger"
+                    (click)="editDisease(editedDiseaseInput.value, selectedDisease)">
+                    حفظ التعديل
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editAvoidFoodModal" tabindex="-1" aria-labelledby="editAvoidFoodModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" dir="rtl">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark d-flex justify-content-between">
+                <h5 class="modal-title" id="editAvoidFoodModalLabel">تعديل اسم الطعام</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="newAvoidFoodName" class="form-label">الاسم الجديد للطعام</label>
+                    <input type="text" class="form-control" id="newAvoidFoodName" #editedAvoidFoodInput
+                        [value]="selectedAvoidFood" />
+                    <small class="form-text text-muted">الطعام الحالي: {{ selectedAvoidFood }}</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                <button type="button" class="btn btn-warning"
+                    (click)="editAvoidFood(editedAvoidFoodInput.value, selectedAvoidFood)">
+                    حفظ التعديل
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addDiseaseModal" tabindex="-1" aria-labelledby="addDiseaseModalLabel" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog" dir="rtl">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white d-flex justify-content-between">
+                <h5 id="addDiseaseModalLabel" class="modal-title">إضافة مرض مزمن</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="diseaseName" class="form-label">اسم المرض</label>
+                    <input type="text" id="diseaseName" class="form-control" #newDiseaseInput />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">إلغاء</button>
+                <button type="button" class="btn btn-danger" (click)="addDisease(newDiseaseInput.value)">
+                    إضافة
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addAvoidFoodModal" tabindex="-1" aria-labelledby="addAvoidFoodModalLabel" aria-hidden="true"
+    class="modal fade">
+    <div class="modal-dialog" dir="rtl">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark d-flex justify-content-between">
+                <h5 id="addAvoidFoodModalLabel" class="modal-title">إضافة طعام يجب تجنبه</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="avoidFoodName" class="form-label">اسم الطعام</label>
+                    <input type="text" id="avoidFoodName" class="form-control" #newAvoidFoodInput />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">إلغاء</button>
+                <button type="button" class="btn btn-warning" (click)="addAvoidFood(newAvoidFoodInput.value)">
+                    إضافة
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

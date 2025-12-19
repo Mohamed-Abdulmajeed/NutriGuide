@@ -1,0 +1,99 @@
+<div class="plans-container">
+
+    <!-- HEADER SECTION -->
+    <div class="allplans-header">
+        <div class="header-content">
+            <h1 class="header-title">جميع الخطط الغذائية</h1>
+            <p class="header-subtitle">إدارة وتنظيم خططك الصحية بسهولة</p>
+        </div>
+
+        <button class="btn-new" (click)="goToAddPlan()">
+            <i class="fa-solid fa-plus"></i>
+            <span>إنشاء خطة جديدة</span>
+        </button>
+    </div>
+
+    <!-- ================= LOADING STATE ================= -->
+    <div class="loading-wrapper" *ngIf="isLoading">
+        <div class="loader"></div>
+        <p>جاري تحميل الخطط الغذائية...</p>
+    </div>
+
+    <!-- ================= ERROR STATE ================= -->
+    <div class="error-state" *ngIf="!isLoading && hasError">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <h2>حدث خطأ أثناء تحميل الخطط</h2>
+        <p>يرجى المحاولة مرة أخرى لاحقًا</p>
+    </div>
+
+    <!-- ================= NO PLANS STATE ================= -->
+    <div class="no-plans" *ngIf="!isLoading && !hasError && sortedPlans.length === 0">
+        <div class="no-plans-content">
+            <div class="empty-icon">
+                <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h2>لم تضف أي خطط بعد</h2>
+            <p>ابدأ بإنشاء خطتك الغذائية الأولى الآن</p>
+            <button class="btn-new btn-create-first" (click)="goToAddPlan()">
+                <i class="fa-solid fa-plus"></i>
+                إنشاء أول خطة
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= PLANS LIST ================= -->
+    <div class="plans-grid" *ngIf="!isLoading && !hasError && sortedPlans.length > 0">
+
+        <div class="plan-card" *ngFor="let plan of sortedPlans">
+
+            <!-- PLAN HEADER -->
+            <div class="plan-header">
+                <div class="plan-title-section">
+                    <div class="plan-icon">
+                        <i class="fa-solid fa-dumbbell"></i>
+                    </div>
+                    <div class="plan-info">
+                        <h2 class="plan-name">{{ plan.name }}</h2>
+                        <span class="plan-date">
+                            تاريخ البداية: {{ plan.startDate | date: 'dd/MM/yyyy' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-details" (click)="goToDetails(plan)" title="عرض التفاصيل">
+                        <i class="fa-solid fa-up-right-from-square"></i>
+                        <span>تفاصيل</span>
+                    </button>
+
+                    <button class="btn btn-cart" (click)="goToShoppingList(plan.id)" title="قائمة التسوق">
+                        <i class="fa-solid fa-cart-plus"></i>
+                        <span>تسوق</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- DIVIDER -->
+            <div class="card-divider"></div>
+
+            <!-- STATS -->
+            <div class="stats-row">
+                <div class="stat-card" *ngFor="let stat of getPlanStats(plan)" [style.background]="stat.bg">
+
+                    <div class="stat-icon">
+                        <i class="{{ stat.icon }}"></i>
+                    </div>
+
+                    <div class="stat-info">
+                        <span class="stat-title">{{ stat.title }}</span>
+                        <span class="stat-value">{{ stat.value }}</span>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

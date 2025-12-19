@@ -1,0 +1,95 @@
+<div class="shopping-list-container" *ngIf="ShoppingList$ | async as list">
+
+    <header class="shopping-header">
+        <div class="title-wrap">
+            <!-- أيقونة حقيبة التسوق -->
+            <svg class="icon bag" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path fill="currentColor"
+                    d="M6 7V6a6 6 0 0112 0v1h1a1 1 0 011 1v11a2 2 0 01-2 2H6a2 2 0 01-2-2V8a1 1 0 011-1h1zm2 0h8V6a4 4 0 00-8 0v1z" />
+            </svg>
+            <div>
+                <h2 class="shopping-title">قائمة التسوق للخطة</h2>
+                <p class="generated-date">تم إنشاؤها بتاريخ: {{ list.generatedDate | date:'dd/MM/yyyy' }}</p>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="action-btn" (click)="printList()" title="طباعة القائمة">
+                <!-- أيقونة طباعة -->
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M19 8H5V3h14v5zM7 19h10v-5H7v5zM16 5H8v3h8V5z" />
+                </svg>
+                طباعة
+            </button>
+            <button class="action-btn" (click)="exportToWord()" title="تصدير إلى Word">
+                <!-- أيقونة Word -->
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" />
+                </svg>
+                Word
+            </button>
+            <button class="action-btn" (click)="exportToPDF()" title="تصدير إلى PDF">
+                <!-- أيقونة PDF -->
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" />
+                </svg>
+                PDF
+            </button>
+            <button class="action-btn" (click)="copyList()" title="نسخ إلى الحافظة">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M16 1H4a2 2 0 00-2 2v14h2V3h12V1zM19 5H8a2 2 0 00-2 2v14a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2zm0 16H8V7h11v14z" />
+                </svg>
+                نسخ
+            </button>
+        </div>
+    </header>
+
+    <div class="shopping-controls">
+        <label class="select-all-label">
+            <input type="checkbox" [checked]="selectAllChecked" (change)="toggleSelectAll(list.items)"
+                class="select-all-checkbox">
+            <span>حدد الكل ({{ selectedItems.size }} / {{ list.items.length }})</span>
+        </label>
+        <p class="selection-info">الرجاء اختيار العناصر المراد طباعتها أو حفظها</p>
+    </div>
+
+    <div class="shopping-items">
+        <div class="shopping-item" [class.selected]="isItemSelected(i)" *ngFor="let item of list.items; let i = index"
+            [attr.data-index]="i">
+
+            <div class="item-checkbox">
+                <input type="checkbox" [checked]="isItemSelected(i)" (change)="toggleItem(i)" [id]="'item-' + i"
+                    class="item-check">
+                <label [for]="'item-' + i" class="check-label"></label>
+            </div>
+
+            <div class="item-left">
+                <div class="item-icon" aria-hidden="true">
+                    <!-- أيقونة مكوّن صغير -->
+                    <svg viewBox="0 0 24 24" class="icon small">
+                        <path fill="currentColor"
+                            d="M12 2a4 4 0 00-4 4v1H6a2 2 0 00-2 2v9h16v-9a2 2 0 00-2-2h-2V6a4 4 0 00-4-4z" />
+                    </svg>
+                </div>
+                <div class="item-info">
+                    <div class="item-name">{{ item.ingredientName }}</div>
+                    <div class="item-meta">الوحدة: {{ item.unit }} &middot; رقم: {{ i + 1 }}</div>
+                </div>
+            </div>
+
+            <div class="item-right">
+                <div class="item-amount">{{ item.amount }} <span class="unit">{{ item.unit }}</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="list.items.length === 0" class="no-items">
+        <svg class="icon empty" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.16 14l-.94-5h12.56l-.94 5H7.16zM20 6H4l1-2h14l1 2z" />
+        </svg>
+        <div>لم يتم إضافة أي عناصر بعد.</div>
+    </div>
+
+</div>

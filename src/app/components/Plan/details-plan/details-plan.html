@@ -1,0 +1,108 @@
+<div class="container" *ngIf="plan">
+
+    <div class="header-actions">
+        <div class="title-block">
+            <h1 class="page-title">{{ plan.name }}</h1>
+        </div>
+
+        <button class="shopping-btn" (click)="goToShoppingList(plan.id)" aria-label="قائمة التسوق">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>قائمة التسوق</span>
+        </button>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card" *ngFor="let item of getPlanStats(plan)" [style.background]="item.bg" role="group"
+            aria-label="{{item.title}}">
+            <div class="stat-icon">
+                <i class="{{ item.icon }}"></i>
+            </div>
+            <div>
+                <div class="stat-title">{{ item.title }}</div>
+                <div class="stat-value">{{ item.value }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngFor="let day of mealsByDay; let i = index" class="day-section">
+
+        <h2 class="day-title">اليوم {{ i + 1 }} — {{ day.date }}</h2>
+
+        <div class="meals-grid">
+            <div class="meal-card card" *ngFor="let meal of day.meals">
+
+                <div class="image-wrapper">
+                    <img [src]="meal.image" alt="{{ meal.name }}" />
+
+                    <button class="fav-btn" (click)="toggleFavorite(meal)" aria-label="إضافة للمفضلة">
+                        <i class="fa-solid"
+                            [ngClass]="isFavorite(meal.id) ? 'fa-heart active-heart' : 'fa-heart-circle-plus'"></i>
+                    </button>
+
+                    <span class="meal-type">{{ meal.mealType }}</span>
+                </div>
+
+                <div class="meal-body">
+                    <h3 class="meal-name"><i class="fa-solid fa-utensils meal-icon"></i>{{ meal.name }}</h3>
+
+                    <div class="calories">
+                        <i class="fa-solid fa-fire"></i>
+                        <span>{{ meal.calories }} سعرة</span>
+                    </div>
+
+                    <div class="macros-grid" aria-label="مكونات غذائية">
+                        <div class="macro-card" aria-label="بروتين">
+                            <div class="macro-icon"><i class="fa-solid fa-drumstick-bite" aria-hidden="true"></i></div>
+                            <div class="macro-info">
+                                <div class="macro-label">بروتين</div>
+                                <div class="macro-value">{{ meal.protein }}g</div>
+                            </div>
+                        </div>
+
+                        <div class="macro-card" aria-label="كربوهيدرات">
+                            <div class="macro-icon"><i class="fa-solid fa-bread-slice" aria-hidden="true"></i></div>
+                            <div class="macro-info">
+                                <div class="macro-label">كربوهيدرات</div>
+                                <div class="macro-value">{{ meal.carbs }}g</div>
+                            </div>
+                        </div>
+
+                        <div class="macro-card" aria-label="دهون">
+                            <div class="macro-icon"><i class="fa-solid fa-bacon" aria-hidden="true"></i></div>
+                            <div class="macro-info">
+                                <div class="macro-label">دهون</div>
+                                <div class="macro-value">{{ meal.fat }}g</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="details-btn" (click)="goToMealDetails(meal)" aria-label="تفاصيل الوجبة">
+                        <span>تفاصيل</span>
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div *ngIf="!plan">
+    <p>الخطة غير موجودة.</p>
+</div>
+
+<!-- Confirm Modal -->
+<div id="confirmModal" class="confirm-overlay hidden">
+    <div class="confirm-box">
+
+        <h3>هل تريد حذف الوجبة من المفضلة؟</h3>
+
+        <div class="modal-actions">
+            <button class="confirm-yes" (click)="confirmDelete()">حذف</button>
+            <button class="confirm-no" (click)="closeConfirm()">إلغاء</button>
+        </div>
+
+    </div>
+</div>

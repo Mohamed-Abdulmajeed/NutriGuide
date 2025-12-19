@@ -1,0 +1,211 @@
+/* Timer Animation */
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 16px rgba(59, 130, 246, 0.8));
+    }
+}
+
+@keyframes timer-countdown {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes button-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes icon-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Timer Circle Styling */
+:host ::ng-deep svg circle:nth-child(2) {
+    filter: drop-shadow(0 0 2px currentColor);
+}
+
+/* Professional timer container */
+.timer-section {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Number counter animation */
+.timer-number {
+    animation: timer-countdown 0.5s ease-out;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+}
+
+/* Smooth transitions for button states */
+button[disabled] {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:not([disabled]) {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:not([disabled]):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+button:not([disabled]):active {
+    transform: translateY(0);
+}
+
+/* Button entrance animation */
+button:not([disabled]) {
+    animation: button-slide-in 0.5s ease-out;
+}
+
+/* Icon pulse animation */
+button i.animate-pulse {
+    animation: icon-pulse 1.5s ease-in-out infinite;
+}
+
+/* ===========================
+   RESPONSIVE ADJUSTMENTS
+=========================== */
+
+/* Tablet - 768px */
+@media (max-width: 1024px) {
+    .timer-circle {
+        width: 120px;
+        height: 120px;
+    }
+
+    .timer-number {
+        font-size: 2.5rem;
+    }
+}
+
+/* Mobile - 640px */
+@media (max-width: 768px) {
+    .timer-circle {
+        width: 100px;
+        height: 100px;
+    }
+
+    .timer-circle svg circle {
+        r: 40;
+        cx: 50;
+        cy: 50;
+    }
+
+    .timer-number {
+        font-size: 1.75rem;
+    }
+
+    button {
+        width: 100%;
+        padding: var(--space-md);
+    }
+}
+
+/* Small Mobile - 480px */
+@media (max-width: 480px) {
+    .timer-circle {
+        width: 80px;
+        height: 80px;
+    }
+
+    .timer-circle svg circle {
+        r: 35;
+        cx: 40;
+        cy: 40;
+    }
+
+    .timer-number {
+        font-size: 1.4rem;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: var(--space-sm);
+    }
+}
+
+/* ===========================
+   DARK MODE
+=========================== */
+
+.dark-mode .timer-section {
+    animation: pulse-glow 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.3));
+}
+
+.dark-mode button {
+    background: linear-gradient(90deg, var(--primary), var(--primary-800));
+    color: white;
+    border-color: var(--primary);
+}
+
+.dark-mode button:hover {
+    box-shadow: 0 12px 24px rgba(16, 185, 129, 0.2);
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background: var(--surface);
+    color: var(--text);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark-mode label {
+    color: var(--text);
+}
+
+/* Accessibility - Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    @keyframes pulse-glow {
+
+        0%,
+        100% {
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+        }
+    }
+
+    @keyframes timer-countdown {
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    svg circle {
+        transition: stroke-dashoffset 0s linear !important;
+    }
+}
