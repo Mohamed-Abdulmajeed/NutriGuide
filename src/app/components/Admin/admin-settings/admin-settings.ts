@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-// import { trigger, transition, style, animate } from '@angular/animations';
 import { Subject, forkJoin } from 'rxjs';
 import { takeUntil } from 'rxjs';
 import { GoalSyustemType } from '../../../models/Profile/icustomer';
@@ -14,38 +13,7 @@ import { SettingService } from '../../../shared/Admin/setting-service';
   imports: [CommonModule, FormsModule],
   templateUrl: './admin-settings.html',
   styleUrls: ['./admin-settings.css'],
-  //   animations: [
-  //     trigger('fadeAnimation', [
-  //       transition(':enter', [
-  //         style({ opacity: 0 }),
-  //         animate('300ms ease-in', style({ opacity: 1 }))
-  //       ]),
-  //       transition(':leave', [
-  //         animate('300ms ease-out', style({ opacity: 0 }))
-  //       ])
-  //     ]),
-  //     trigger('slideAnimation', [
-  //       transition(':enter', [
-  //         style({ transform: 'translateY(-20px)', opacity: 0 }),
-  //         animate('300ms ease-out', style({ transform: 'translateY(0)', opacity: 1 }))
-  //       ])
-  //     ]),
-  //     trigger('itemAnimation', [
-  //       transition(':enter', [
-  //         style({ opacity: 0, transform: 'translateX(20px)' }),
-  //         animate('300ms ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
-  //       ])
-  //     ]),
-  //     trigger('toastAnimation', [
-  //       transition(':enter', [
-  //         style({ transform: 'translateX(100%)', opacity: 0 }),
-  //         animate('300ms ease-out', style({ transform: 'translateX(0)', opacity: 1 }))
-  //       ]),
-  //       transition(':leave', [
-  //         animate('300ms ease-in', style({ transform: 'translateX(100%)', opacity: 0 }))
-  //       ])
-  //     ])
-  //   ]
+
 })
 
 export class AdminSettings implements OnInit, OnDestroy {
