@@ -45,6 +45,9 @@ export class App implements OnInit {
         this.showLayout = !hiddenRoutes.some(route =>
           event.urlAfterRedirects.includes(route)
         );
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 0);
       }
 
       if (event instanceof NavigationError) {
@@ -53,7 +56,6 @@ export class App implements OnInit {
         this.showLayout = false;
         this.pageTitle = 'Page Not Found';
       }
-
     });
 
 

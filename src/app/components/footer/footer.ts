@@ -8,5 +8,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './footer.css',
 })
 export class Footer {
+  scrollToTop() {
+    const container = document.querySelector('.content');
+    container?.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
 }
