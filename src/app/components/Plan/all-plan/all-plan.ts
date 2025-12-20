@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PlanService } from '../../../shared/Plan/plan-service';
@@ -10,7 +10,7 @@ import { IPlan } from '../../../models/Plan/iplan';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './all-plan.html',
-  styleUrls: ['./all-plan.css'], // صححت الاسم
+  styleUrls: ['./all-plan.css'],
 })
 export class AllPlan {
 
@@ -19,7 +19,7 @@ export class AllPlan {
   isLoading = true;
   hasError = false;
 
-  constructor(private router: Router, private planService: PlanService) {
+  constructor(private router: Router, private planService: PlanService, private cd: ChangeDetectorRef) {
     this.AllPlan$ = this.planService.loadPlans();
     // ------
     this.isLoading = true;
@@ -32,6 +32,7 @@ export class AllPlan {
             new Date(a.startDate).getTime()
         );
         this.isLoading = false;
+        this.cd.detectChanges();
       },
       error: (err) => {
         console.error(err);
