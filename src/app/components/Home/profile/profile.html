@@ -109,7 +109,7 @@
                         <h6>مستوى النشاط</h6>
                     </div>
 
-                    <div class="metric-value text-xs">
+                    <div class="metric-value" style="font-size: 14px;">
                         {{ getActivityLabel(customer.activityLevel) }}
                     </div>
 
@@ -171,7 +171,7 @@
                         @for (med of customer.medicines; track med.medicineName) {
                         <div class="list-item success">
                             <div class="item-content">
-                                <div class="item-title">
+                                <div class="item-title" style="color: green;">
                                     <i class="bi bi-capsule me-1"></i>
                                     {{ med.medicineName }}
                                 </div>
@@ -214,7 +214,7 @@
                         @for (disease of customer.chronicDiseases; track disease) {
                         <div class="list-item danger">
                             <div class="item-content">
-                                <div class="item-title">
+                                <div class="item-title" style="color: red;">
                                     <i class="bi bi-heart-pulse me-1"></i>
                                     {{ disease }}
                                 </div>
@@ -254,7 +254,7 @@
                         @for (food of customer.avoidFoods; track food) {
                         <div class="list-item warning">
                             <div class="item-content">
-                                <div class="item-title">
+                                <div class="item-title" style="color: chocolate;">
                                     <i class="bi bi-slash-circle me-1"></i>
                                     {{ food }}
                                 </div>
