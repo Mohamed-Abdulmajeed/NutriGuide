@@ -11,7 +11,7 @@
     --accent-text: #1e40af;
     --action-btn-bg: rgba(255, 255, 255, 0.92);
     --action-btn-text: #111827;
-    --action-btn-icon: #111827;
+    --action-btn-icon: #f90606;
     --macro-value-bg: #ffffff;
     --macro-value-text: #111827;
 }
@@ -27,7 +27,7 @@
     --accent-text: #93c5fd;
     --action-btn-bg: rgba(255, 255, 255, 0.06);
     --action-btn-text: #e6eef6;
-    --action-btn-icon: #e6eef6;
+    --action-btn-icon: #f50a0a;
     --macro-value-bg: #0f1724;
     --macro-value-text: #f1f5f9;
 }
@@ -85,7 +85,7 @@
 
 .action-btn i {
     font-size: 16px;
-    color: rgb(37, 4, 4)404 !important;
+    color: rgb(247, 3, 3)404 !important;
 }
 
 /* Favorite button styling */
@@ -692,7 +692,7 @@ n.confirm-no {
 :host(.host-dark) .meal-header .action-btn,
 :host-context(.dark-mode) .meal-header .action-btn {
     background: rgba(255, 255, 255, 0.06) !important;
-    color: #e6eef6 !important;
+    color: #a81818 !important;
     box-shadow: 0 6px 22px rgba(0, 0, 0, 0.6) !important;
 }
 

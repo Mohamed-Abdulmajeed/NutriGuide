@@ -16,7 +16,8 @@
                 <div class="overlay-right">
                     <button class="action-btn fav-btn text-danger" aria-label="مفضلة" (click)="toggleFavorite()"
                         [attr.aria-pressed]="isFavorite">
-                        <i [ngClass]="{ 'fa-heart': true, 'fa-solid': isFavorite, 'fa-regular': !isFavorite }"
+                        <i style="color: red;"
+                            [ngClass]="{ 'fa-heart': true, 'fa-solid': isFavorite, 'fa-regular': !isFavorite }"
                             [class.heart-filled]="isFavorite"></i>
                     </button>
                     <button class="action-btn" aria-label="مشاركة" (click)="shareMeal()">
