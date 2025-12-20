@@ -1,13 +1,12 @@
 <div class="admin-settings-wrapper">
+
     <!-- Header -->
     <header class="settings-header">
         <div class="header-content">
-            <button class="back-btn" (click)="goBack()" aria-label="العودة">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 12H5M12 19l-7-7 7-7" />
-                </svg>
-                <span>عودة</span>
+            <button class="back-btn" (click)="goBack()">
+                ← عودة
             </button>
+
             <div class="header-title">
                 <h1>إعدادات النظام</h1>
                 <p>إدارة الأهداف وأنواع الأنظمة</p>
@@ -15,219 +14,142 @@
         </div>
     </header>
 
-    <!-- Loading State -->
+    <!-- Loading -->
     <div *ngIf="loading" class="loading-state">
         <div class="spinner"></div>
-        <p>جارٍ التحميل...</p>
+        <span>جارٍ التحميل...</span>
     </div>
 
-    <!-- Toast Container -->
-    <div class="toasts-container" role="region" aria-live="polite">
+    <!-- Toasts -->
+    <div class="toasts-container">
         <div *ngFor="let t of toasts" class="toast" [class.toast-success]="t.type === 'success'"
-            [class.toast-error]="t.type === 'error'" [@toastAnimation]>
-            <div class="toast-icon">
-                <svg *ngIf="t.type === 'success'" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.285 2l-11.285 11.567-5.556-5.558L0 9.99l8.722 8.728L24 4.728z" />
-                </svg>
-                <svg *ngIf="t.type === 'error'" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                </svg>
+            [class.toast-error]="t.type === 'error'">
+
+            <span>{{ t.text }}</span>
+            <button (click)="removeToast(t.id)">✕</button>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div *ngIf="showConfirmModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>تأكيد الحذف</h3>
+            <p>{{ confirmMessage }}</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" (click)="cancelConfirm()">إلغاء</button>
+                <button class="btn-danger" (click)="confirmDelete()">حذف</button>
             </div>
-            <span class="toast-message">{{ t.text }}</span>
-            <button class="toast-close" (click)="removeToast(t.id)" aria-label="إغلاق الإخطار">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                </svg>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="settings-container" [class.disabled]="loading">
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn" [class.active]="tab === 'goals'" (click)="setTab('goals')">
+                الأهداف
+            </button>
+
+            <button class="tab-btn" [class.active]="tab === 'systems'" (click)="setTab('systems')">
+                أنواع الأنظمة
             </button>
         </div>
-    </div>
 
-    <!-- Confirmation Modal -->
-    <div *ngIf="showConfirmModal" class="modal-overlay" (click)="cancelConfirm()" [@fadeAnimation]>
-        <div class="modal-content" (click)="$event.stopPropagation()" [@slideAnimation]>
-            <div class="modal-header">
-                <h2>تأكيد الحذف</h2>
-            </div>
-            <div class="modal-body">
-                <p>{{ confirmMessage }}</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" (click)="cancelConfirm()">إلغاء</button>
-                <button class="btn btn-danger" (click)="confirmDelete()">حذف</button>
-            </div>
-        </div>
-    </div>
+        <!-- GOALS -->
+        <section *ngIf="tab === 'goals'" class="content-card">
 
-    <!-- Main Content -->
-    <div class="settings-container" [class.loading]="loading">
-        <!-- Tabs -->
-        <div class="tabs-wrapper">
-            <div class="tabs">
-                <button class="tab-btn" [class.active]="tab === 'goals'" (click)="setTab('goals')"
-                    [attr.aria-selected]="tab === 'goals'">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="1" />
-                        <circle cx="19" cy="12" r="1" />
-                        <circle cx="5" cy="12" r="1" />
-                    </svg>
-                    <span>الأهداف</span>
-                </button>
-                <button class="tab-btn" [class.active]="tab === 'systems'" (click)="setTab('systems')"
-                    [attr.aria-selected]="tab === 'systems'">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="7" height="7" />
-                        <rect x="14" y="3" width="7" height="7" />
-                        <rect x="3" y="14" width="7" height="7" />
-                        <rect x="14" y="14" width="7" height="7" />
-                    </svg>
-                    <span>أنواع الأنظمة</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Goals Tab -->
-        <section *ngIf="tab === 'goals'" class="tab-content" [@fadeAnimation]>
-            <div class="content-card">
-                <div class="card-header">
-                    <div class="header-info">
-                        <h2>الأهداف المتاحة</h2>
-                        <p class="subtitle">{{ goals.length }} هدف</p>
-                    </div>
-                </div>
-
-                <!-- Goals List -->
-                <div class="items-list" *ngIf="goals.length > 0; else emptyGoalsState">
-                    <div class="item-card" *ngFor="let g of goals" [@itemAnimation]>
-                        <div class="item-content">
-                            <span class="item-name">{{ g.name }}</span>
-                        </div>
-                        <button class="btn btn-danger btn-sm" (click)="deleteGoal(g.name)" title="حذف الهدف">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-9l-1 1H5v2h14V4z" />
-                            </svg>
-                            <span>حذف</span>
-                        </button>
-                    </div>
-                </div>
-                <ng-template #emptyGoalsState>
-                    <div class="empty-state">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.5">
-                            <circle cx="12" cy="12" r="1" />
-                            <circle cx="19" cy="12" r="1" />
-                            <circle cx="5" cy="12" r="1" />
-                        </svg>
-                        <p>لا توجد أهداف في الوقت الحالي</p>
-                    </div>
-                </ng-template>
-
-                <!-- Add Goal Form -->
-                <div class="form-section">
-                    <h3 class="form-title">إضافة هدف جديد</h3>
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder="أدخل اسم الهدف" [(ngModel)]="newGoalName"
-                            (keyup.enter)="addGoal()">
-                        <button class="btn btn-primary" (click)="addGoal()">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-                            </svg>
-                            <span>إضافة</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Edit Goal Form -->
-                <div class="form-section">
-                    <h3 class="form-title">تعديل هدف موجود</h3>
-                    <div class="form-group">
-                        <select class="form-input" [(ngModel)]="editOldGoal" aria-label="اختر هدفاً لتعديله">
-                            <option value="">-- اختر هدفاً لتعديله --</option>
-                            <option *ngFor="let g of goals" [value]="g.name">{{ g.name }}</option>
-                        </select>
-                        <input type="text" class="form-input" placeholder="الاسم الجديد" [(ngModel)]="editNewGoal"
-                            (keyup.enter)="updateGoal()">
-                        <button class="btn btn-primary" (click)="updateGoal()">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" />
-                            </svg>
-                            <span>تعديل</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div *ngIf="tab === 'systems'" class="content-card">
             <div class="card-header">
-                <div class="header-info">
-                    <h2>أنواع الأنظمة</h2>
-                    <p class="subtitle">{{ systems.length }} نظام</p>
-                </div>
+                <h2>الأهداف</h2>
+                <span>{{ goals.length }} هدف</span>
             </div>
 
-            <!-- Systems List -->
-            <div class="items-list" *ngIf="systems.length > 0; else emptySystemsState">
-                <div class="item-card" *ngFor="let s of systems" [@itemAnimation]>
-                    <div class="item-content">
-                        <span class="item-name">{{ s.name }}</span>
-                    </div>
-                    <button class="btn btn-danger btn-sm" (click)="deleteSystem(s.name)" title="حذف النظام">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-9l-1 1H5v2h14V4z" />
-                        </svg>
-                        <span>حذف</span>
+            <div *ngIf="goals.length; else emptyGoals" class="items-list">
+                <div class="item-card" *ngFor="let g of goals">
+                    <span>{{ g.name }}</span>
+                    <button class="btn-danger btn-sm" (click)="deleteGoal(g.name)">
+                        حذف
                     </button>
                 </div>
             </div>
-            <ng-template #emptySystemsState>
-                <div class="empty-state">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.5">
-                        <rect x="3" y="3" width="7" height="7" />
-                        <rect x="14" y="3" width="7" height="7" />
-                        <rect x="3" y="14" width="7" height="7" />
-                        <rect x="14" y="14" width="7" height="7" />
-                    </svg>
-                    <p>لا توجد أنظمة في الوقت الحالي</p>
-                </div>
+
+            <ng-template #emptyGoals>
+                <p class="empty">لا توجد أهداف</p>
             </ng-template>
 
-            <!-- Add System Form -->
+            <!-- Add -->
             <div class="form-section">
-                <h3 class="form-title">إضافة نظام جديد</h3>
+                <h4>إضافة هدف</h4>
                 <div class="form-group">
-                    <input type="text" class="form-input" placeholder="أدخل اسم النظام" [(ngModel)]="newSystemName"
-                        (keyup.enter)="addSystem()">
-                    <button class="btn btn-primary" (click)="addSystem()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-                        </svg>
-                        <span>إضافة</span>
+                    <input style="color: aliceblue;" type="text" [(ngModel)]="newGoalName" placeholder="اسم الهدف">
+                    <button class="btn-primary" (click)="addGoal()">إضافة</button>
+                </div>
+            </div>
+
+            <!-- Edit -->
+            <div class="form-section">
+                <h4>تعديل هدف</h4>
+                <div class="form-group">
+                    <select style="color: aliceblue;" [(ngModel)]="editOldGoal">
+                        <option value="">اختر هدف</option>
+                        <option style="color: aliceblue;" *ngFor="let g of goals" [value]="g.name">{{ g.name }}</option>
+                    </select>
+
+                    <input style="color: aliceblue;" type="text" [(ngModel)]="editNewGoal" placeholder="الاسم الجديد">
+
+                    <button class="btn-primary" (click)="updateGoal()">تعديل</button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SYSTEMS -->
+        <section *ngIf="tab === 'systems'" class="content-card">
+
+            <div class="card-header">
+                <h2>أنواع الأنظمة</h2>
+                <span>{{ systems.length }} نظام</span>
+            </div>
+
+            <div *ngIf="systems.length; else emptySystems" class="items-list">
+                <div class="item-card" *ngFor="let s of systems">
+                    <span>{{ s.name }}</span>
+                    <button class="btn-danger btn-sm" (click)="deleteSystem(s.name)">
+                        حذف
                     </button>
                 </div>
             </div>
 
-            <!-- Edit System Form -->
+            <ng-template #emptySystems>
+                <p class="empty">لا توجد أنظمة</p>
+            </ng-template>
+
+            <!-- Add -->
             <div class="form-section">
-                <h3 class="form-title">تعديل نظام موجود</h3>
+                <h4>إضافة نظام</h4>
                 <div class="form-group">
-                    <select class="form-input" [(ngModel)]="editOldSystem" aria-label="اختر نظاماً لتعديله">
-                        <option value="">-- اختر نظاماً لتعديله --</option>
-                        <option *ngFor="let s of systems" [value]="s.name">{{ s.name }}</option>
-                    </select>
-                    <input type="text" class="form-input" placeholder="الاسم الجديد" [(ngModel)]="editNewSystem"
-                        (keyup.enter)="updateSystem()">
-                    <button class="btn btn-primary" (click)="updateSystem()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" />
-                        </svg>
-                        <span>تعديل</span>
-                    </button>
+                    <input style="color: aliceblue;" type="text" [(ngModel)]="newSystemName" placeholder="اسم النظام">
+                    <button class="btn-primary" (click)="addSystem()">إضافة</button>
                 </div>
             </div>
-        </div>
+
+            <!-- Edit -->
+            <div class="form-section">
+                <h4>تعديل نظام</h4>
+                <div class="form-group">
+                    <select style="color: aliceblue;" [(ngModel)]="editOldSystem">
+                        <option value="">اختر نظام</option>
+                        <option style="color: aliceblue;" *ngFor="let s of systems" [value]="s.name">{{ s.name }}
+                        </option>
+                    </select>
+
+                    <input style="color: aliceblue;" type="text" [(ngModel)]="editNewSystem" placeholder="الاسم الجديد">
+
+                    <button class="btn-primary" (click)="updateSystem()">تعديل</button>
+                </div>
+            </div>
+
+        </section>
+
     </div>
 </div>
