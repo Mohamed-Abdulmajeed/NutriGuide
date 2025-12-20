@@ -48,15 +48,21 @@ export class AllPlan {
 
   goToShoppingList(planId: number) {
     this.router.navigate(['/shopping-list', planId]);
+    const container = document.querySelector('.content');
+    container?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
 
   goToDetails(plan: IPlan) {
     this.router.navigate(['/plan-details'], { state: { plan } });
+    const container = document.querySelector('.content');
+    container?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   goToAddPlan() {
     this.router.navigate(['/add-plan']);
+    const container = document.querySelector('.content');
+    container?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   getPlanStats(plan: IPlan) {

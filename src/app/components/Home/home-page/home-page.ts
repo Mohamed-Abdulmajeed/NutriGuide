@@ -197,14 +197,20 @@ export class HomePage implements OnInit {
   // ==================================
   navigateToPlanDetails(plan: IPlan) {
     this.router.navigate(['/plan-details'], { state: { plan } });
+    const container = document.querySelector('.content');
+    container?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   navigateToMealDetails(meal: IMeal) {
     this.router.navigate(['/meal-details'], { state: { meal } });
+    const container = document.querySelector('.content');
+    container?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   navigateToAlternatives(meal: IMeal) {
     this.router.navigate(['/add-meal'], { state: { meal } });
+    const container = document.querySelector('.content');
+    container?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
 }

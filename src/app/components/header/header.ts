@@ -55,6 +55,8 @@ export class Header implements OnInit {
 
   navigateTo(route: string) {
     this.router.navigateByUrl(route);
+    const container = document.querySelector('.content');
+    container?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
 }

@@ -32,6 +32,8 @@ export class DetailsPlan implements OnInit {
     if (!state?.plan) {
       console.warn("Plan data not found, redirecting...");
       this.router.navigate(['/all-plans']);
+      const container = document.querySelector('.content');
+      container?.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
@@ -107,10 +109,14 @@ export class DetailsPlan implements OnInit {
 
   goToMealDetails(meal: IMeal) {
     this.router.navigate(['/meal-details'], { state: { meal } });
+    const container = document.querySelector('.content');
+    container?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   goToShoppingList(planId: number) {
     this.router.navigate(['/shopping-list', planId]);
+    const container = document.querySelector('.content');
+    container?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   getPlanStats(plan: IPlan) {

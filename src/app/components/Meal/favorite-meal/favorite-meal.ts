@@ -45,6 +45,8 @@ export class FavoriteMeal implements OnInit {
 
   navigateToMealDetails(meal: IMeal) {
     this.router.navigate(['/meal-details'], { state: { meal } });
+    const container = document.querySelector('.content');
+    container?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
 }
