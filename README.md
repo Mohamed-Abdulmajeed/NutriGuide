@@ -105,12 +105,6 @@ The platform combines modern frontend technologies with a robust backend to deli
 
 ## 📸 Screenshots
 
-### Platform Overview
-![NutriGuide Swagger API Documentation](../../NutriGuide-Back-End/nutriguide.runasp.net_swagger_index.html.png)
-*API Documentation - Backend Swagger Interface*
-
----
-
 ## 🖼️ Platform Screenshots
 
 ![Screenshot 1](./screen1.png)
@@ -135,11 +129,12 @@ The platform combines modern frontend technologies with a robust backend to deli
 
 ---
 
-## 🎥 Video Demo
+## Demo Video
 
-A comprehensive demo video showcasing all platform features is available:
+A short demo video is included. Click the link below to download or view the video:
 
-**[Download Full Demo Video](https://nutri-guide-olive.vercel.app/assets/demo.mp4)**
+- [Download Demo Video](Nurtiguide.mp4)
+
 
 The video covers:
 - ✅ User registration and authentication
@@ -160,19 +155,23 @@ Experience NutriGuide yourself:
 **[🔗 Live Application - https://nutri-guide-olive.vercel.app/login](https://nutri-guide-olive.vercel.app/login)**
 
 
-## 💼 Portfolio & Video
+## API Documentation
 
-The complete video demonstration showcasing all platform features is hosted on:
+The project uses Swagger / OpenAPI to provide interactive API documentation. Use the Swagger UI to view available endpoints, request/response schemas and to execute calls for testing.
 
-**[📱 Mohamed Abdelmajeed - Full Stack Developer Portfolio](https://mohamed-abdelmajeed-portfolio.vercel.app/)**
+## Live Demo
 
-The video demonstrates:
-- Complete user workflow from registration to meal planning
-- Admin dashboard capabilities
-- AI meal generation in action
-- Shopping list generation and management
-- Mobile responsiveness across devices
-- Real-time notifications system
+The front-end live demo is hosted on Vercel. Open the link below to view the public demo (login page):
+
+- https://nutri-guide-olive.vercel.app/login
+
+## Portfolio
+
+The complete project demo and video walkthrough are featured on the creator's portfolio:
+
+- [Mohamed Abdelmajeed Portfolio](https://mohamed-abdelmajeed-portfolio.vercel.app/)
+
+*The demo video is hosted live on the portfolio site.*
 
 ---
 
